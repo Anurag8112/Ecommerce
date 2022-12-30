@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Ecommerce.Models
+namespace Ecommerce.Models.DbModel
 {
     public partial class Brand
     {
         public Brand()
         {
+            CategoryLevel1s = new HashSet<CategoryLevel1>();
             Products = new HashSet<Product>();
         }
 
@@ -17,6 +18,7 @@ namespace Ecommerce.Models
         public int CategoryId { get; set; }
 
         public virtual CategoryLevel1 Category { get; set; }
+        public virtual ICollection<CategoryLevel1> CategoryLevel1s { get; set; }
         public virtual ICollection<Product> Products { get; set; }
     }
 }

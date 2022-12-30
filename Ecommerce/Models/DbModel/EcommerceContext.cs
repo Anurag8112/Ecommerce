@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace Ecommerce.Models
+namespace Ecommerce.Models.DbModel
 {
     public partial class EcommerceContext : DbContext
     {
@@ -52,6 +52,7 @@ namespace Ecommerce.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=ANURAG-KATIYAR\\SQLEXPRESS;Database=Ecommerce;Trusted_Connection=True;");
             }
         }
@@ -108,7 +109,7 @@ namespace Ecommerce.Models
                     .WithMany(p => p.Brands)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Brand_Category");
+                    .HasConstraintName("FK_Brand_Category_Level1");
             });
 
             modelBuilder.Entity<Cart>(entity =>
@@ -150,24 +151,26 @@ namespace Ecommerce.Models
             {
                 entity.ToTable("Category_Level1");
 
+                entity.Property(e => e.BrandId).HasColumnName("Brand_Id");
+
                 entity.Property(e => e.CategoryL1)
                     .IsRequired()
                     .HasMaxLength(30)
                     .IsUnicode(false)
                     .HasColumnName("Category_L1");
 
-                entity.Property(e => e.CategoryL2Id).HasColumnName("Category_L2_Id");
-
-                entity.HasOne(d => d.CategoryL2)
+                entity.HasOne(d => d.Brand)
                     .WithMany(p => p.CategoryLevel1s)
-                    .HasForeignKey(d => d.CategoryL2Id)
+                    .HasForeignKey(d => d.BrandId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Category_Level1_Category_Level2");
+                    .HasConstraintName("FK_Category_Level1_Brand");
             });
 
             modelBuilder.Entity<CategoryLevel2>(entity =>
             {
                 entity.ToTable("Category_Level2");
+
+                entity.Property(e => e.CategoryL1Id).HasColumnName("Category_L1_Id");
 
                 entity.Property(e => e.CategoryL2)
                     .IsRequired()
@@ -175,24 +178,30 @@ namespace Ecommerce.Models
                     .IsUnicode(false)
                     .HasColumnName("Category_L2");
 
-                entity.Property(e => e.CategoryL3Id).HasColumnName("Category_L3_Id");
-
-                entity.HasOne(d => d.CategoryL3)
+                entity.HasOne(d => d.CategoryL1)
                     .WithMany(p => p.CategoryLevel2s)
-                    .HasForeignKey(d => d.CategoryL3Id)
+                    .HasForeignKey(d => d.CategoryL1Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Category_Level2_Category_Level31");
+                    .HasConstraintName("FK_Category_Level2_Category_Level1");
             });
 
             modelBuilder.Entity<CategoryLevel3>(entity =>
             {
                 entity.ToTable("Category_Level3");
 
+                entity.Property(e => e.CategoryL2Id).HasColumnName("Category_L2_Id");
+
                 entity.Property(e => e.CategoryL3)
                     .IsRequired()
                     .HasMaxLength(30)
                     .IsUnicode(false)
                     .HasColumnName("Category_L3");
+
+                entity.HasOne(d => d.CategoryL2)
+                    .WithMany(p => p.CategoryLevel3s)
+                    .HasForeignKey(d => d.CategoryL2Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Category_Level3_Category_Level21");
             });
 
             modelBuilder.Entity<Color>(entity =>
