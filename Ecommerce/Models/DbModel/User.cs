@@ -25,6 +25,7 @@ namespace Ecommerce.Models.DbModel
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public bool IsVerified { get; set; }
 
         public virtual UserGender Gender { get; set; }
         public virtual CartTable CartTable { get; set; }

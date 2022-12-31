@@ -19,6 +19,7 @@ namespace Ecommerce.Models.DbModel
 
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
+        public virtual DbSet<BrandCategoryMapping> BrandCategoryMappings { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<CartTable> CartTables { get; set; }
         public virtual DbSet<CategoryLevel1> CategoryLevel1s { get; set; }
@@ -52,7 +53,6 @@ namespace Ecommerce.Models.DbModel
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=ANURAG-KATIYAR\\SQLEXPRESS;Database=Ecommerce;Trusted_Connection=True;");
             }
         }
@@ -104,12 +104,27 @@ namespace Ecommerce.Models.DbModel
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
 
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Brands)
-                    .HasForeignKey(d => d.CategoryId)
+            modelBuilder.Entity<BrandCategoryMapping>(entity =>
+            {
+                entity.ToTable("Brand_Category_Mapping");
+
+                entity.Property(e => e.BrandId).HasColumnName("Brand_Id");
+
+                entity.Property(e => e.CategoryL1Id).HasColumnName("Category_L1_Id");
+
+                entity.HasOne(d => d.Brand)
+                    .WithMany(p => p.BrandCategoryMappings)
+                    .HasForeignKey(d => d.BrandId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Brand_Category_Level1");
+                    .HasConstraintName("FK_Brand_Category_Mapping_Brand");
+
+                entity.HasOne(d => d.CategoryL1)
+                    .WithMany(p => p.BrandCategoryMappings)
+                    .HasForeignKey(d => d.CategoryL1Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Brand_Category_Mapping_Category_Level1");
             });
 
             modelBuilder.Entity<Cart>(entity =>
@@ -151,19 +166,11 @@ namespace Ecommerce.Models.DbModel
             {
                 entity.ToTable("Category_Level1");
 
-                entity.Property(e => e.BrandId).HasColumnName("Brand_Id");
-
                 entity.Property(e => e.CategoryL1)
                     .IsRequired()
                     .HasMaxLength(30)
                     .IsUnicode(false)
                     .HasColumnName("Category_L1");
-
-                entity.HasOne(d => d.Brand)
-                    .WithMany(p => p.CategoryLevel1s)
-                    .HasForeignKey(d => d.BrandId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Category_Level1_Brand");
             });
 
             modelBuilder.Entity<CategoryLevel2>(entity =>
@@ -547,12 +554,16 @@ namespace Ecommerce.Models.DbModel
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(20)
+                    .HasMaxLength(int.MaxValue)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Phone)
                     .IsRequired()
                     .HasMaxLength(12)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IsVerified)
+                    .IsRequired()
                     .IsUnicode(false);
 
                 entity.Property(e => e.UserName)

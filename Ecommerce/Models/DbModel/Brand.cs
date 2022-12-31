@@ -9,16 +9,14 @@ namespace Ecommerce.Models.DbModel
     {
         public Brand()
         {
-            CategoryLevel1s = new HashSet<CategoryLevel1>();
+            BrandCategoryMappings = new HashSet<BrandCategoryMapping>();
             Products = new HashSet<Product>();
         }
 
         public int Id { get; set; }
         public string BrandName { get; set; }
-        public int CategoryId { get; set; }
 
-        public virtual CategoryLevel1 Category { get; set; }
-        public virtual ICollection<CategoryLevel1> CategoryLevel1s { get; set; }
+        public virtual ICollection<BrandCategoryMapping> BrandCategoryMappings { get; set; }
         public virtual ICollection<Product> Products { get; set; }
     }
 }
