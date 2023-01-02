@@ -9,11 +9,12 @@ namespace Ecommerce.Controllers
     [ApiController]
     [Route("api/v1")]
     public class ProductController : Controller
-    {   
-
-        public IActionResult Index()
+    {
+        [HttpPost]
+        [Route("Add-Product")]
+        public String  Addproducts()
         {
-            return View();
+            return "Product Added";
         }
     }
 }

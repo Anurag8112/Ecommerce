@@ -16,7 +16,9 @@ namespace Ecommerce.Models.ViewModel
         public string Phone { get; set; }
         public string Email { get; set; }
         public bool isVerified { get; set; }
+        public bool IsActive { get; set; }
         public string ExceptionMessage { get; set; }
-        public string token { get; set; }
+        public string Token { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

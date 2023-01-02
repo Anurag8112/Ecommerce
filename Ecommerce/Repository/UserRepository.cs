@@ -23,12 +23,14 @@ namespace Ecommerce.Repository
         private readonly IConfiguration _configuration;
         private readonly ITwilioRestClient _client;
         private readonly IHttpContextAccessor _context;
+        private readonly IRefreshTokenGenerator _refreshTokenGenerator;
 
-        public UserRepository( ITwilioRestClient client, IHttpContextAccessor context, IConfiguration configuration)
+        public UserRepository( ITwilioRestClient client, IHttpContextAccessor context, IConfiguration configuration, IRefreshTokenGenerator refreshTokenGenerator)
         {    
             _client = client;
             _context = context;
             _configuration = configuration;
+            _refreshTokenGenerator = refreshTokenGenerator;
         }
 
         protected string Generate_otp()
@@ -112,7 +114,8 @@ namespace Ecommerce.Repository
                     Email = user.Email,
                     Password = Password.HashEncrypt(user.Password),
                     GenderId = user.GenderId,
-                    IsVerified = false
+                    IsVerified = false,
+                    IsActive = true 
                 };
 
                 var tempRole = new UserRoleMapping()
@@ -190,6 +193,12 @@ namespace Ecommerce.Repository
 
                     var user = db.Users.First(x => x.UserName == credentials.UserName && x.Password == Password.HashEncrypt(credentials.Password));
 
+                    if (user.IsActive==false)
+                    {
+                        newuser.ExceptionMessage = "Your account is Deactivated Please Reactivate Your Account";
+                        return newuser;
+                    }
+
                     if (user == null)
                     {
                         return newuser;
@@ -209,6 +218,10 @@ namespace Ecommerce.Repository
                             new Claim("Password",user.Password)
                         };
 
+
+
+
+
                         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.key));
 
                         var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -217,7 +230,7 @@ namespace Ecommerce.Repository
                                 jwt.Issuer,
                                 jwt.Audience,
                                 claims,
-                                expires: DateTime.Now.AddMinutes(10),
+                                expires: DateTime.Now.AddMinutes(5),
                                 signingCredentials: signIn
                                 );
 
@@ -227,7 +240,7 @@ namespace Ecommerce.Repository
                             string number = "+" + user.CountryCode + user.Phone;
                             ResendOtp(number);
                             _context.HttpContext.Session.SetInt32("Id", user.Id);
-                            newuser.token = new JwtSecurityTokenHandler().WriteToken(token);
+                            newuser.Token = new JwtSecurityTokenHandler().WriteToken(token);
                             return newuser;
                         }
 
@@ -240,7 +253,9 @@ namespace Ecommerce.Repository
                             Gender = GetGender(user.GenderId),
                             isVerified = user.IsVerified,
                             Role = GetUserRole(user.Id),
-                            token = new JwtSecurityTokenHandler().WriteToken(token)
+                            Token = new JwtSecurityTokenHandler().WriteToken(token),
+                            RefreshToken = _refreshTokenGenerator.GenerateToken()
+                           
                         };
                     }
 
@@ -286,5 +301,40 @@ namespace Ecommerce.Repository
 
             return "Address Added Successfully";
         }
+
+        public List<UserDetailsModel> GetAllUsers()
+        {
+            EcommerceContext db =new EcommerceContext();
+
+            List<UserDetailsModel> list = new List<UserDetailsModel>();
+            try
+            {
+                    foreach(User user in db.Users)
+                    {
+                        var printuser = new UserDetailsModel() { 
+                            UserName=user.UserName,
+                            FirstName=user.FirstName,
+                            LastName=user.LastName,
+                            Email=user.Email,
+                            Gender=GetGender(user.GenderId),
+                            Phone=user.Phone,
+                            Role=GetUserRole(user.Id),
+                            isVerified=user.IsVerified,
+                        };
+
+                    list.Add(printuser);
+                    }
+            }catch(Exception ex)
+            {
+                return list;
+            }
+
+            return list;
+        }
+
+        //public string DeleteUser(int userId)
+        //{
+            
+        //}
     }
 }

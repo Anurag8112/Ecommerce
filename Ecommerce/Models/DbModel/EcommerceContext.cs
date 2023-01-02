@@ -17,6 +17,8 @@ namespace Ecommerce.Models.DbModel
         {
         }
 
+
+
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<BrandCategoryMapping> BrandCategoryMappings { get; set; }
@@ -48,6 +50,23 @@ namespace Ecommerce.Models.DbModel
         public virtual DbSet<Warehouse> Warehouses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
         public virtual DbSet<WishlistItem> WishlistItems { get; set; }
+
+
+        public override int SaveChanges()
+        {
+            foreach(var entry in ChangeTracker.Entries())
+            {
+                var entity = entry.Entity;
+
+                if (entry.State == EntityState.Deleted)
+                {
+                    entry.State = EntityState.Modified;
+
+                    entity.GetType().GetProperty("IsActive").SetValue(entity,false);
+                }
+            }
+            return base.SaveChanges();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -563,6 +582,10 @@ namespace Ecommerce.Models.DbModel
                     .IsUnicode(false);
 
                 entity.Property(e => e.IsVerified)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IsActive)
                     .IsRequired()
                     .IsUnicode(false);
 

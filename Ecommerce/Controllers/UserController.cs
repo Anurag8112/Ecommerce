@@ -16,7 +16,7 @@ namespace Ecommerce.Controllers
         private readonly IUserRepository _userRepository;
 
         public UserController(IUserRepository userRepository)
-        {
+        {  
             _userRepository = userRepository;
         }
 
@@ -52,7 +52,6 @@ namespace Ecommerce.Controllers
             return res;
         }
 
-
         [HttpPost]
         [Route("Sign-in")]
         public UserDetailsModel Login(LoginModel credentials)
@@ -63,6 +62,11 @@ namespace Ecommerce.Controllers
             {
                 details.ExceptionMessage = "Invalid UserName or Password";
 
+                return details;
+            }
+
+            if (details.IsActive == false)
+            {
                 return details;
             }
 
@@ -91,6 +95,19 @@ namespace Ecommerce.Controllers
 
             return result;
         }
+
+
+        //[HttpPost]
+        //[Route("Delete-User")]
+        //public string DeleteUser(int userId)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState).ToString();
+        //    }
+
+        //    var result=_userRepository
+        //}
 
     }
 }

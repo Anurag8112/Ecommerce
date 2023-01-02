@@ -40,13 +40,11 @@ namespace Ecommerce
             services.AddDbContext<DbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
             services.AddHttpClient<ITwilioRestClient, TwilioClient>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireAdministratorRole",
-                     policy => policy.RequireRole("Buyer"));
-            });
+            
 
             services.AddSession(option =>
             {
@@ -98,9 +96,10 @@ namespace Ecommerce
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:key"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:key"])),
                 };
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -114,14 +113,11 @@ namespace Ecommerce
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
             app.UseSession();
-            app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseAuthorization();
+            app.UseStatusCodePages();
 
             app.UseEndpoints(endpoints =>
             {
