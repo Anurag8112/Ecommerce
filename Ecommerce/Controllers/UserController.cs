@@ -1,13 +1,8 @@
 ﻿using Ecommerce.Interface;
 using Ecommerce.Models.ViewModel;
-using Ecommerce.Repository;
-using Ecommerce.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Controllers
 {
@@ -18,7 +13,7 @@ namespace Ecommerce.Controllers
         private readonly IUserRepository _userRepository;
 
         public UserController(IUserRepository userRepository)
-        {  
+        {
             _userRepository = userRepository;
         }
 
@@ -44,6 +39,8 @@ namespace Ecommerce.Controllers
             return Ok(result);
         }
 
+
+
         [HttpPost]
         [Route("Verify-User")]
         public bool VerifyUser(string otp)
@@ -52,7 +49,7 @@ namespace Ecommerce.Controllers
 
             return res;
         }
-        
+
 
         [HttpPost]
         [Route("Sign-in")]
@@ -62,38 +59,28 @@ namespace Ecommerce.Controllers
             {
                 var details = _userRepository.Login(credentials);
 
-                if (details == null)
-                {
-                    details.ExceptionMessage = "Invalid UserName or Password";
-
-                    throw new Exception(details.ExceptionMessage);
-                }
-
-                if (details.IsActive == false)
-                {
-                    throw new Exception(details.ExceptionMessage);
-                }
 
                 if (details.isVerified == false)
                 {
                     details.UserName = credentials.UserName;
                     details.ExceptionMessage = "User Not Verified Please redirect to Verify API";
 
-                    throw new Exception(details.ExceptionMessage);
+                    return Ok(details.ExceptionMessage);
                 }
 
                 return Ok(details);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
 
 
+
         [HttpPost]
         [Route("Update-Address")]
-        [Authorize (Roles ="SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult UpdateUserAddress(int userId, AddressModel userAddress)
         {
             if (!ModelState.IsValid)
@@ -107,9 +94,10 @@ namespace Ecommerce.Controllers
         }
 
 
+
         [HttpGet]
         [Route("GetAllUsers")]
-        [Authorize(Roles="SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult GetAllUsers()
         {
             try
@@ -117,11 +105,14 @@ namespace Ecommerce.Controllers
                 var Result = _userRepository.GetAllUsers();
                 return Ok(Result);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
 
         [HttpGet]
         [Route("User/{id}")]
@@ -134,6 +125,44 @@ namespace Ecommerce.Controllers
 
                 return Ok(result);
 
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occurred: " + ex.Message);
+            }
+        }
+
+
+
+        [HttpGet]
+        [Route("User/{id}/Addresses")]
+        [Authorize]
+        public IActionResult GetUserAddresses(int id)
+        {
+
+            try
+            {
+                var Result = _userRepository.GetUserAddresses(id);
+                return Ok(Result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occurred: " + ex.Message);
+            }
+        }
+
+
+
+        [HttpDelete]
+        [Route("User/{id}/Delete")]
+        [Authorize]
+        public IActionResult DeactivateUser(int id, string password)
+        {
+            try
+            {
+                var Result = _userRepository.DeactivateUser(id, password);
+                return Ok(Result);
             }
             catch (Exception ex)
             {

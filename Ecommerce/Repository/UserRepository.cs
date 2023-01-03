@@ -26,7 +26,6 @@ namespace Ecommerce.Repository
 
         public UserRepository(ITwilioRestClient client, IHttpContextAccessor context, IConfiguration configuration, IRefreshTokenGenerator refreshTokenGenerator)
         {
-
             _client = client;
             _context = context;
             _configuration = configuration;
@@ -47,6 +46,7 @@ namespace Ecommerce.Repository
             return strrandom;
         }
 
+
         public UserGender GetGender(int id)
         {
             EcommerceContext db = new EcommerceContext();
@@ -62,6 +62,7 @@ namespace Ecommerce.Repository
                 return null;
             }
         }
+
 
         public UserRole GetRole(int id)
         {
@@ -81,6 +82,7 @@ namespace Ecommerce.Repository
 
         }
 
+
         public UserRole GetUserRole(int userId)
         {
             try
@@ -97,6 +99,7 @@ namespace Ecommerce.Repository
                 return null;
             }
         }
+
 
         public string UserSignUp(SignUpModel user)
         {
@@ -146,6 +149,7 @@ namespace Ecommerce.Repository
 
         }
 
+
         public bool VerifyUser(string userotp)
         {
 
@@ -168,6 +172,7 @@ namespace Ecommerce.Repository
             return false;
         }
 
+
         public bool SendOtp(string number)
         {
             string otp = Generate_otp();
@@ -181,6 +186,7 @@ namespace Ecommerce.Repository
 
             return true;
         }
+
 
         public UserDetailsModel Login(LoginModel credentials)
         {
@@ -196,13 +202,12 @@ namespace Ecommerce.Repository
 
                     if (user.IsActive == false)
                     {
-                        newuser.ExceptionMessage = "Your account is Deactivated Please Reactivate Your Account";
-                        return newuser;
+                        throw new Exception("Your account is Deactivated Please Reactivate Your Account");
                     }
 
                     if (user == null)
                     {
-                        return newuser;
+                        throw new Exception("Invalid UserName or Password");
                     }
 
                     var jwt = _configuration.GetSection("Jwt").Get<Jwt>();
@@ -272,12 +277,12 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
-                newuser.ExceptionMessage = ex.ToString();
-                return newuser;
+                throw new Exception(ex.Message);
             }
 
             return newuser;
         }
+
 
         public string AddUserAddress(int userId, AddressModel userAddress)
         {
@@ -313,6 +318,7 @@ namespace Ecommerce.Repository
             return "Address Added Successfully";
         }
 
+
         public List<UserDetailsModel> GetAllUsers()
         {
 
@@ -345,6 +351,7 @@ namespace Ecommerce.Repository
             return list;
         }
 
+
         public UserDetailsModel GetUserById(int id)
         {
             try
@@ -370,8 +377,70 @@ namespace Ecommerce.Repository
                 throw new Exception(ex.Message);
             }
         }
+
+
+        public List<AddressModel> GetUserAddresses(int id)
+        {
+            EcommerceContext db = new EcommerceContext();
+
+            try
+            {
+                var userAddress = db.Addresses.Where(x => x.UserId == id);
+
+                if (userAddress == null)
+                {
+                    throw new Exception("No Address Found");
+                }
+
+                List<AddressModel> list = new List<AddressModel>();
+
+                foreach (var add in userAddress)
+                {
+                    var Address = new AddressModel()
+                    {
+                        AddressLine1 = add.AddressLine1,
+                        AddressLine2 = add.AddressLine2,
+                        City = add.City,
+                        State = add.State,
+                        Country = add.Country,
+                        Postalcode = add.Postalcode
+                    };
+
+                    list.Add(Address);
+                }
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public bool DeactivateUser(int id, string password)
+        {
+            EcommerceContext db = new EcommerceContext();
+            try
+            {
+                var user = db.Users.First(x => x.Id == id);
+
+                if (user == null)
+                {
+                    throw new Exception("User doesn't exist");
+                }
+
+                if (user.Password == Password.HashEncrypt(password))
+                {
+                    db.Users.Remove(user);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return true;
+        }
     }
-
-
-
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
@@ -54,7 +52,7 @@ namespace Ecommerce.Models.DbModel
 
         public override int SaveChanges()
         {
-            foreach(var entry in ChangeTracker.Entries())
+            foreach (var entry in ChangeTracker.Entries())
             {
                 var entity = entry.Entity;
 
@@ -62,7 +60,7 @@ namespace Ecommerce.Models.DbModel
                 {
                     entry.State = EntityState.Modified;
 
-                    entity.GetType().GetProperty("IsActive").SetValue(entity,false);
+                    entity.GetType().GetProperty("IsActive").SetValue(entity, false);
                 }
             }
             return base.SaveChanges();

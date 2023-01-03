@@ -2,8 +2,6 @@
 using Ecommerce.Models.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Interface
 {
@@ -15,9 +13,10 @@ namespace Ecommerce.Interface
         public bool VerifyUser(String userotp);
         public bool SendOtp(string number);
         public UserDetailsModel Login(LoginModel credentials);
-        public string AddUserAddress(int userId,AddressModel userAddress);
+        public string AddUserAddress(int userId, AddressModel userAddress);
         public List<UserDetailsModel> GetAllUsers();
         public UserDetailsModel GetUserById(int id);
-        
+        public List<AddressModel> GetUserAddresses(int id);
+        public bool DeactivateUser(int id, string password);
     }
 }
