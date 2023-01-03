@@ -13,10 +13,11 @@ namespace Ecommerce.Interface
         public UserGender GetGender(int id);
         public UserRole GetRole(int id);
         public bool VerifyUser(String userotp);
-        public string ResendOtp(string number);
+        public bool SendOtp(string number);
         public UserDetailsModel Login(LoginModel credentials);
         public string AddUserAddress(int userId,AddressModel userAddress);
         public List<UserDetailsModel> GetAllUsers();
-      //  public string DeleteUser(int userId);
+        public UserDetailsModel GetUserById(int id);
+        
     }
 }

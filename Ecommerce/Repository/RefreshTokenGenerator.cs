@@ -19,6 +19,5 @@ namespace Ecommerce.Repository
                 return Convert.ToBase64String(randomNumber);
             }
         }
-
     }
 }

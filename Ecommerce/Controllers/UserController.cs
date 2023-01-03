@@ -1,5 +1,7 @@
 ﻿using Ecommerce.Interface;
 using Ecommerce.Models.ViewModel;
+using Ecommerce.Repository;
+using Ecommerce.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,26 +24,25 @@ namespace Ecommerce.Controllers
 
         [HttpPost]
         [Route("Sign-up")]
-        public string SignUp(SignUpModel user)
+        public IActionResult SignUp(SignUpModel user)
         {
             string result;
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState).ToString();
+                    return BadRequest(ModelState);
                 }
 
                 result = _userRepository.UserSignUp(user);
             }
             catch (Exception ex)
             {
-                return "Error occurred: " + ex.Message.ToString();
+                return BadRequest("Error occurred: " + ex.Message);
             }
 
-            return result;
+            return Ok(result);
         }
-
 
         [HttpPost]
         [Route("Verify-User")]
@@ -51,63 +52,95 @@ namespace Ecommerce.Controllers
 
             return res;
         }
+        
 
         [HttpPost]
         [Route("Sign-in")]
-        public UserDetailsModel Login(LoginModel credentials)
+        public IActionResult Login(LoginModel credentials)
         {
-            var details = _userRepository.Login(credentials);
-
-            if (details == null)
+            try
             {
-                details.ExceptionMessage = "Invalid UserName or Password";
+                var details = _userRepository.Login(credentials);
 
-                return details;
+                if (details == null)
+                {
+                    details.ExceptionMessage = "Invalid UserName or Password";
+
+                    throw new Exception(details.ExceptionMessage);
+                }
+
+                if (details.IsActive == false)
+                {
+                    throw new Exception(details.ExceptionMessage);
+                }
+
+                if (details.isVerified == false)
+                {
+                    details.UserName = credentials.UserName;
+                    details.ExceptionMessage = "User Not Verified Please redirect to Verify API";
+
+                    throw new Exception(details.ExceptionMessage);
+                }
+
+                return Ok(details);
             }
-
-            if (details.IsActive == false)
+            catch(Exception ex)
             {
-                return details;
+                return BadRequest("Error occurred: " + ex.Message);
             }
-
-            if (details.isVerified == false)
-            {
-                details.UserName = credentials.UserName;
-                details.ExceptionMessage = "User Not Verified Please redirect to Verify API";
-
-                return details; 
-            }
-
-            return details;
         }
 
 
         [HttpPost]
         [Route("Update-Address")]
-        public string UpdateUserAddress(int userId, AddressModel userAddress)
+        [Authorize (Roles ="SuperAdmin")]
+        public IActionResult UpdateUserAddress(int userId, AddressModel userAddress)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState).ToString();
+                return BadRequest(ModelState);
             }
 
             var result = _userRepository.AddUserAddress(userId, userAddress);
 
-            return result;
+            return Ok(result);
         }
 
 
-        //[HttpPost]
-        //[Route("Delete-User")]
-        //public string DeleteUser(int userId)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState).ToString();
-        //    }
+        [HttpGet]
+        [Route("GetAllUsers")]
+        [Authorize(Roles="SuperAdmin")]
+        public IActionResult GetAllUsers()
+        {
+            try
+            {
+                var Result = _userRepository.GetAllUsers();
+                return Ok(Result);
 
-        //    var result=_userRepository
-        //}
+            }catch(Exception ex)
+            {
+                return BadRequest("Error occurred: " + ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("User/{id}")]
+        [Authorize(Roles = "SuperAdmin")]
+        public IActionResult GetUserById(int id)
+        {
+            try
+            {
+                var result = _userRepository.GetUserById(id);
+
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occurred: " + ex.Message);
+            }
+        }
+
 
     }
 }
