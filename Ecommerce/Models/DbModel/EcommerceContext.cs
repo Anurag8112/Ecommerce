@@ -50,21 +50,21 @@ namespace Ecommerce.Models.DbModel
         public virtual DbSet<WishlistItem> WishlistItems { get; set; }
 
 
-        public override int SaveChanges()
-        {
-            foreach (var entry in ChangeTracker.Entries())
-            {
-                var entity = entry.Entity;
+        //public override int SaveChanges()
+        //{
+        //    foreach (var entry in ChangeTracker.Entries())
+        //    {
+        //        var entity = entry.Entity;
 
-                if (entry.State == EntityState.Deleted)
-                {
-                    entry.State = EntityState.Modified;
+        //        if (entry.State == EntityState.Deleted)
+        //        {
+        //            entry.State = EntityState.Modified;
 
-                    entity.GetType().GetProperty("IsActive").SetValue(entity, false);
-                }
-            }
-            return base.SaveChanges();
-        }
+        //            entity.GetType().GetProperty("IsActive").SetValue(entity, false);
+        //        }
+        //    }
+        //    return base.SaveChanges();
+        //}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -484,11 +484,23 @@ namespace Ecommerce.Models.DbModel
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Brand");
 
-                entity.HasOne(d => d.Category)
+                entity.HasOne(d => d.Category1)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CategoryId)
+                    .HasForeignKey(d => d.CategoryL1Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Category_Level1");
+
+                entity.HasOne(d => d.Category2)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.CategoryL2Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_Category_Level2");
+
+                entity.HasOne(d => d.Category3)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.CategoryL3Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_Category_Level3");
             });
 
             modelBuilder.Entity<ProductDetail>(entity =>

@@ -63,7 +63,6 @@ namespace Ecommerce.Repository
             }
         }
 
-
         public UserRole GetRole(int id)
         {
             try
@@ -81,7 +80,6 @@ namespace Ecommerce.Repository
             }
 
         }
-
 
         public UserRole GetUserRole(int userId)
         {
@@ -132,8 +130,6 @@ namespace Ecommerce.Repository
                 tempuser.UserRoleMappings.Add(tempRole);
                 db.Users.Add(tempuser);
 
-
-
                 var sentOtp = SendOtp(newnum);
 
                 _context.HttpContext.Session.SetInt32("Id", tempuser.Id);
@@ -144,11 +140,9 @@ namespace Ecommerce.Repository
             catch (Exception ex)
             {
                 throw new Exception(ex.Message.ToString());
-                //return "Error occurred: " + ex.Message.ToString();
             }
 
         }
-
 
         public bool VerifyUser(string userotp)
         {
@@ -432,7 +426,8 @@ namespace Ecommerce.Repository
 
                 if (user.Password == Password.HashEncrypt(password))
                 {
-                    db.Users.Remove(user);
+                    user.IsActive = false;
+                    db.Users.Update(user);
                     db.SaveChanges();
                 }
             }

@@ -9,8 +9,7 @@ namespace Ecommerce.Models.DbModel
     {
         public int ImgId { get; set; }
         public int ProdId { get; set; }
-        public byte[] Image { get; set; }
-
+        public string Image { get; set; }
         public virtual Product Prod { get; set; }
     }
 }

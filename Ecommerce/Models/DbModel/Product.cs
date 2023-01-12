@@ -18,12 +18,16 @@ namespace Ecommerce.Models.DbModel
 
         public int ProdId { get; set; }
         public string ProdName { get; set; }
-        public byte[] ProdDescription { get; set; }
-        public int CategoryId { get; set; }
+        public string ProdDescription { get; set; }
+        public int CategoryL1Id { get; set; }
+        public int CategoryL2Id { get; set; }
+        public int CategoryL3Id { get; set; }
         public int BrandId { get; set; }
 
         public virtual Brand Brand { get; set; }
-        public virtual CategoryLevel1 Category { get; set; }
+        public virtual CategoryLevel1 Category1 { get; set; }
+        public virtual CategoryLevel2 Category2 { get; set; }
+        public virtual CategoryLevel3 Category3 { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }

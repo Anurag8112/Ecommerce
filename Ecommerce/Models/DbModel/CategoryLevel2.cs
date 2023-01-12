@@ -10,6 +10,7 @@ namespace Ecommerce.Models.DbModel
         public CategoryLevel2()
         {
             CategoryLevel3s = new HashSet<CategoryLevel3>();
+            Products = new HashSet<Product>();
         }
 
         public int Id { get; set; }
@@ -18,5 +19,6 @@ namespace Ecommerce.Models.DbModel
 
         public virtual CategoryLevel1 CategoryL1 { get; set; }
         public virtual ICollection<CategoryLevel3> CategoryLevel3s { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }
