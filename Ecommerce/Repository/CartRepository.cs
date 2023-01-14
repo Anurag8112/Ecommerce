@@ -4,7 +4,6 @@ using Ecommerce.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Repository
 {
@@ -79,7 +78,6 @@ namespace Ecommerce.Repository
                     {
                         return false;
                     }
-
                 }
             }
             catch (Exception ex)

@@ -53,6 +53,23 @@ namespace Ecommerce.Controllers
             }
         }
 
+        [HttpDelete]
+        [Route("DeleteMyProduct")]
+       // [Authorize(Roles = "SuperAdmin,Seller")]
+        public IActionResult DeleteProduct(DeleteProductModel model)
+        {
+            try
+            {
+                var Result = _productRepository.DeleteProduct(model);
+
+                return Ok(Result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error Occured: " + ex.Message);
+            }
+        }
+
         [HttpGet]
         [Route("{id}/Show-My-Products")]
         public IActionResult ShowMyProduct(int id)

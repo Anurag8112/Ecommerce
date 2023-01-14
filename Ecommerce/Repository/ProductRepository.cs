@@ -4,7 +4,6 @@ using Ecommerce.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Ecommerce.Repository
 {
@@ -129,7 +128,7 @@ namespace Ecommerce.Repository
                     };
                     tempProduct.ProductImages.Add(productImage);
                 }
-                
+
                 var productDetails = new ProductDetail()
                 {
                     Price = product.Price,
@@ -144,7 +143,7 @@ namespace Ecommerce.Repository
                     UserId = product.UserId
                 };
 
-                
+
                 tempProduct.ProductDetails.Add(productDetails);
                 tempProduct.UserProductMappings.Add(userProductMapping);
                 db.Products.Add(tempProduct);
@@ -272,32 +271,40 @@ namespace Ecommerce.Repository
                 var myProduct = from userMapping in db.UserProductMappings
                                 join product in db.Products
                                 on userMapping.ProdId equals product.ProdId
-                                into productGroup from products in productGroup
+                                into productGroup
+                                from products in productGroup
                                 join brand in db.Brands
                                 on products.BrandId equals brand.Id
                                 join categoryL1 in db.CategoryLevel1s
                                 on products.CategoryL1Id equals categoryL1.Id
-                                into completeProduct from compProd in completeProduct
+                                into completeProduct
+                                from compProd in completeProduct
                                 join categoryL2 in db.CategoryLevel2s
                                 on products.CategoryL2Id equals categoryL2.Id
-                                into withCategoryL2 from categoryL2 in withCategoryL2
+                                into withCategoryL2
+                                from categoryL2 in withCategoryL2
                                 join categoryL3 in db.CategoryLevel3s
                                 on products.CategoryL3Id equals categoryL3.Id
-                                into withCategoryL3 from categoryL3 in withCategoryL3
+                                into withCategoryL3
+                                from categoryL3 in withCategoryL3
                                 join productDetail in db.ProductDetails
                                 on products.ProdId equals productDetail.ProdId
-                                into withProdDetails from details in withProdDetails
+                                into withProdDetails
+                                from details in withProdDetails
                                 join color in db.Colors
                                 on details.ColorId equals color.Id
-                                into withcolor from color in withcolor
+                                into withcolor
+                                from color in withcolor
                                 join size in db.Sizes
                                 on details.SizeId equals size.Id
-                                into withsize from size in withsize
+                                into withsize
+                                from size in withsize
                                 join image in db.ProductImages
-                                on products.ProdId equals image.ProdId 
-                                into withImage from image in withImage
+                                on products.ProdId equals image.ProdId
+                                into withImage
+                                from image in withImage
                                 where userMapping.UserId == userId
-                                select new { products,brand,compProd,categoryL2,categoryL3, details, color,size, img=withImage.Where(x=>x.ProdId==products.ProdId)};
+                                select new { products, brand, compProd, categoryL2, categoryL3, details, color, size, img = withImage.Where(x => x.ProdId == products.ProdId) };
 
 
                 List<ShowProduct> showProductList = new List<ShowProduct>();
@@ -313,46 +320,47 @@ namespace Ecommerce.Repository
                         images.Add(image.Image);
                     }
 
-                    var completeProduct = new ShowProduct() { 
+                    var completeProduct = new ShowProduct()
+                    {
 
-                        UserId=user.Id,
-                        UserName=user.UserName,
+                        UserId = user.Id,
+                        UserName = user.UserName,
 
-                        productData=new ProductData()
+                        productData = new ProductData()
                         {
-                            productName=product.products.ProdName,
-                            productDesc=product.products.ProdDescription,
-                            productDetail=new ProdDetail()
+                            productName = product.products.ProdName,
+                            productDesc = product.products.ProdDescription,
+                            productDetail = new ProdDetail()
                             {
-                                price=product.details.Price,
-                                productColor=new ProductColors()
+                                price = product.details.Price,
+                                productColor = new ProductColors()
                                 {
-                                    colorName=product.color.Color1
+                                    colorName = product.color.Color1
                                 },
-                                productSize=new ProductSizes()
+                                productSize = new ProductSizes()
                                 {
-                                    sizeName=product.size.Size1
+                                    sizeName = product.size.Size1
                                 },
                             },
-                            brand=new Brands()
+                            brand = new Brands()
                             {
-                                brandName=product.brand.BrandName
+                                brandName = product.brand.BrandName
                             },
-                            categoryL1=new CategoryL1()
+                            categoryL1 = new CategoryL1()
                             {
-                                categoryL1=product.compProd.CategoryL1
+                                categoryL1 = product.compProd.CategoryL1
                             },
                             categoryL2 = new CategoryL2()
                             {
-                                categoryL2=product.categoryL2.CategoryL2
+                                categoryL2 = product.categoryL2.CategoryL2
                             },
-                            categoryL3=new CategoryL3()
+                            categoryL3 = new CategoryL3()
                             {
-                                categoryL3=product.categoryL3.CategoryL3
+                                categoryL3 = product.categoryL3.CategoryL3
                             },
-                            productImage=new ProductImages()
+                            productImage = new ProductImages()
                             {
-                                image=images 
+                                image = images
                             }
                         }
                     };
@@ -367,15 +375,27 @@ namespace Ecommerce.Repository
             }
         }
 
-        public string DeleteProduct(int UserId, int ProdId)
+        public bool DeleteProduct(DeleteProductModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                EcommerceContext db = new EcommerceContext();
+                var deleteMapping = db.UserProductMappings.First(x => x.UserId == model.UserId && x.ProdId == model.ProdId);
+
+                db.UserProductMappings.Remove(deleteMapping);
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public string UpdateProduct(int UserId, ProductModel product)
         {
             throw new NotImplementedException();
         }
-        
+
     }
 }
