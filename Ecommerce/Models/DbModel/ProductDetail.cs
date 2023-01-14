@@ -21,8 +21,8 @@ namespace Ecommerce.Models.DbModel
         public virtual Color Color { get; set; }
         public virtual Product Prod { get; set; }
         public virtual Size Size { get; set; }
-        public virtual Cart Cart { get; set; }
         public virtual InventryItem InventryItem { get; set; }
         public virtual ICollection<WishlistItem> WishlistItems { get; set; }
+        public virtual ICollection<Cart> Carts { get; set; }
     }
 }

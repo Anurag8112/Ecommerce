@@ -148,17 +148,19 @@ namespace Ecommerce.Models.DbModel
             {
                 entity.ToTable("Cart");
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.ProdId).HasColumnName("ProdId");
 
-                entity.HasOne(d => d.CartNavigation)
+                entity.Property(e => e.CartId).HasColumnName("CartId");
+
+                entity.HasOne(d => d.Carts)
                     .WithMany(p => p.Carts)
                     .HasForeignKey(d => d.CartId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cart_Cart");
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Cart)
-                    .HasForeignKey<Cart>(d => d.Id)
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Carts)
+                    .HasForeignKey(d => d.ProdId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cart_Product_Detail");
             });

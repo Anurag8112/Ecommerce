@@ -43,6 +43,8 @@ namespace Ecommerce
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IWishlistRepository, WishlistRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
             services.AddHttpClient<ITwilioRestClient, TwilioClient>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
