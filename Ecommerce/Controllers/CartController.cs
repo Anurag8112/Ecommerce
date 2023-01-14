@@ -3,9 +3,6 @@ using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Controllers
 {
@@ -36,12 +33,30 @@ namespace Ecommerce.Controllers
 
                 return Ok(Result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
 
+
+        [HttpDelete]
+        [Route("RemoveFromCart")]
+        [Authorize(Roles = "Buyer")]
+        public IActionResult RemoveFromCart(CartModel model)
+        {
+            try
+            {
+                var Result = _cartRepository.RemoveFromCart(model);
+
+                return Ok(Result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occurred: " + ex.Message);
+            }
+        }
 
     }
 }

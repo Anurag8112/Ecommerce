@@ -90,7 +90,51 @@ namespace Ecommerce.Repository
 
         public bool RemoveFromCart(CartModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                EcommerceContext db = new EcommerceContext();
+                var IsCartExist = db.CartTables.FirstOrDefault(x => x.UserId == model.UserId);
+                var isValidUser = db.Wishlists.FirstOrDefault(x => x.UserId == model.UserId);
+                var isValidProduct = db.Carts.FirstOrDefault(x => x.ProdId == model.ProductDetailId && IsCartExist.Id == x.CartId);
+
+
+                if (IsCartExist == null)
+                {
+                    throw new Exception("Wishlist is Empty");
+                }
+                var CartItemCount = db.Carts.Count(x => x.CartId == IsCartExist.Id);
+
+                if (isValidUser == null)
+                {
+                    throw new Exception("Invalid UserId");
+                }
+
+                if (isValidProduct == null)
+                {
+                    throw new Exception("Invalid ProductId");
+                }
+
+                if (CartItemCount > 0)
+                {
+                    var removeProductFromCart = db.Carts.FirstOrDefault(x => x.ProdId == model.ProductDetailId && x.CartId == IsCartExist.Id);
+
+                    db.Carts.Remove(removeProductFromCart);
+                    db.SaveChanges();
+                    CartItemCount--;
+                }
+
+                if (CartItemCount == 0)
+                {
+                    db.CartTables.Remove(IsCartExist);
+                    db.SaveChanges();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public List<ShowProduct> ShowCartItems()
