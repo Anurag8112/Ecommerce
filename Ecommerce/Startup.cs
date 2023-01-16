@@ -46,6 +46,7 @@ namespace Ecommerce
             services.AddScoped<IWishlistRepository, WishlistRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
             services.AddHttpClient<ITwilioRestClient, TwilioClient>();

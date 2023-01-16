@@ -39,7 +39,6 @@ namespace Ecommerce.Controllers
             }
         }
 
-
         [HttpDelete]
         [Route("RemoveFromCart")]
         [Authorize(Roles = "Buyer")]

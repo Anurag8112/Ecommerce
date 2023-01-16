@@ -60,7 +60,7 @@ namespace Ecommerce.Controllers
 
         [HttpGet]
         [Route("ShowAllBrand")]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize]
         public IActionResult ShowAllBrand()
         {
             try
