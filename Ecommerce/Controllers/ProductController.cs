@@ -55,7 +55,7 @@ namespace Ecommerce.Controllers
 
         [HttpDelete]
         [Route("DeleteMyProduct")]
-       // [Authorize(Roles = "SuperAdmin,Seller")]
+        [Authorize(Roles = "SuperAdmin,Seller")]
         public IActionResult DeleteProduct(DeleteProductModel model)
         {
             try
