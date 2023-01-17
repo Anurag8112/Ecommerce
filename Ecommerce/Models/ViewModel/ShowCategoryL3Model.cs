@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Models.ViewModel
+﻿namespace Ecommerce.Models.ViewModel
 {
     public class ShowCategoryL3Model
     {

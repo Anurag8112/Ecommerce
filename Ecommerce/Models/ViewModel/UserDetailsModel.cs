@@ -1,8 +1,4 @@
 ﻿using Ecommerce.Models.DbModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Models.ViewModel
 {

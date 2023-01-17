@@ -1,6 +1,4 @@
-﻿using Ecommerce.Models.DbModel;
-using Ecommerce.Models.ViewModel;
-using Microsoft.AspNetCore.Mvc;
+﻿using Ecommerce.Models.ViewModel;
 using System.Collections.Generic;
 
 namespace Ecommerce.Interface

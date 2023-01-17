@@ -2,15 +2,12 @@
 
 namespace Ecommerce.Models.ViewModel
 {
-    public class WishlistModel
+    public class EditCommentModel
     {
         [Required]
-        public int UserId { get; set; }
+        public int CommentId { get; set; }
         [Required]
-        public int ProductDetailsId { get; set; }
-    }
-    public class ShowWishlist
-    {
+        public string Comment { get; set; }
         [Required]
         public int UserId { get; set; }
     }

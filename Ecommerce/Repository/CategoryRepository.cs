@@ -4,7 +4,6 @@ using Ecommerce.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Repository
 {
@@ -18,14 +17,15 @@ namespace Ecommerce.Repository
 
                 var categoryL1 = new CategoryLevel1()
                 {
-                    CategoryL1=model.CategoryL1Name
+                    CategoryL1 = model.CategoryL1Name
                 };
 
                 db.CategoryLevel1s.Add(categoryL1);
                 db.SaveChanges();
                 return true;
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -39,7 +39,7 @@ namespace Ecommerce.Repository
 
                 var categoryL2 = new CategoryLevel2()
                 {
-                    CategoryL1Id=model.CategoryL1Id,
+                    CategoryL1Id = model.CategoryL1Id,
                     CategoryL2 = model.CategoryL2Name
                 };
 
@@ -62,7 +62,7 @@ namespace Ecommerce.Repository
 
                 var categoryL3 = new CategoryLevel3()
                 {
-                    CategoryL2Id=model.CategoryL2Id,
+                    CategoryL2Id = model.CategoryL2Id,
                     CategoryL3 = model.CategoryL3Name
                 };
 
@@ -101,7 +101,7 @@ namespace Ecommerce.Repository
                     throw new Exception("This Category Contains Sub-Category. First remove all sub-category");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -176,7 +176,7 @@ namespace Ecommerce.Repository
 
             List<ShowCategoryL1Model> CategoryList = new List<ShowCategoryL1Model>();
 
-            var AllCategory = db.CategoryLevel1s.Select(x => new ShowCategoryL1Model { CategoryL1Id=x.Id,CategoryL1Name=x.CategoryL1});
+            var AllCategory = db.CategoryLevel1s.Select(x => new ShowCategoryL1Model { CategoryL1Id = x.Id, CategoryL1Name = x.CategoryL1 });
 
             foreach (var category in AllCategory)
             {

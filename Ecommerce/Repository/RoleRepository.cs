@@ -4,7 +4,6 @@ using Ecommerce.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Repository
 {
@@ -16,7 +15,8 @@ namespace Ecommerce.Repository
             {
                 EcommerceContext db = new EcommerceContext();
 
-                var Role = new UserRole() {
+                var Role = new UserRole()
+                {
                     Role = model.Role
                 };
 
@@ -25,7 +25,7 @@ namespace Ecommerce.Repository
 
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -59,7 +59,8 @@ namespace Ecommerce.Repository
                     throw new Exception("There Is Many User With This Role. Please Remove All User With This Role Before Deleting This Role");
                 }
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -72,25 +73,25 @@ namespace Ecommerce.Repository
                 EcommerceContext db = new EcommerceContext();
                 List<ShowRoles> RoleList = new List<ShowRoles>();
 
-                var AllRoles = db.UserRoles.Select(x => new ShowRoles { RoleId = x.Id, Role = x.Role});
+                var AllRoles = db.UserRoles.Select(x => new ShowRoles { RoleId = x.Id, Role = x.Role });
 
                 foreach (var Role in AllRoles)
-                { 
+                {
                     RoleList.Add(Role);
                 }
 
                 foreach (var Role in RoleList)
                 {
-                    Role.UserCount = db.UserRoleMappings.Count(x => Role.RoleId==x.RoleId);
+                    Role.UserCount = db.UserRoleMappings.Count(x => Role.RoleId == x.RoleId);
                 }
 
                 return RoleList;
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
     }
 }
-    

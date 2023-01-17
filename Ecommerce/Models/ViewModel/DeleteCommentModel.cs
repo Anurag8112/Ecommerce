@@ -2,11 +2,11 @@
 
 namespace Ecommerce.Models.ViewModel
 {
-    public class CategoryModelL2
+    public class DeleteCommentModel
     {
         [Required]
-        public int CategoryL1Id { get; set; }
+        public int UserId { get; set; }
         [Required]
-        public string CategoryL2Name { get; set; }
+        public int CommentId { get; set; }
     }
 }

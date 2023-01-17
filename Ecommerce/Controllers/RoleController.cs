@@ -3,9 +3,6 @@ using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Controllers
 {
@@ -13,7 +10,7 @@ namespace Ecommerce.Controllers
     [Route("api/v1")]
     public class RoleController : Controller
     {
-        private readonly  IRoleRepository _roleRepository;
+        private readonly IRoleRepository _roleRepository;
 
         public RoleController(IRoleRepository roleRepository)
         {
@@ -31,7 +28,8 @@ namespace Ecommerce.Controllers
 
                 return Ok(Result);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
@@ -48,7 +46,8 @@ namespace Ecommerce.Controllers
 
                 return Ok(Result);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
@@ -65,7 +64,8 @@ namespace Ecommerce.Controllers
 
                 return Ok(Result);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }

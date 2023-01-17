@@ -4,7 +4,6 @@ using Ecommerce.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Repository
 {
@@ -18,13 +17,14 @@ namespace Ecommerce.Repository
 
                 var brand = new Brand()
                 {
-                    BrandName=model.BrandName
+                    BrandName = model.BrandName
                 };
 
                 db.Brands.Add(brand);
                 db.SaveChanges();
                 return true;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -58,7 +58,7 @@ namespace Ecommerce.Repository
                     throw new Exception("There Is Many Product With This Brand. Please Remove All Products With This Brand Before Deleting This Brand");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -87,7 +87,7 @@ namespace Ecommerce.Repository
                 return BrandList;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

@@ -68,7 +68,8 @@ namespace Ecommerce.Controllers
 
                 return Ok(Result);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }

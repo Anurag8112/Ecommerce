@@ -8,24 +8,23 @@ namespace Ecommerce.Controllers
 {
     [ApiController]
     [Route("api/v1")]
-    public class BrandController : Controller
+    public class CommentController : Controller
     {
-        private readonly IBrandRepository _brandRepository;
+        private readonly ICommentRepository _commentRepository;
 
-        public BrandController(IBrandRepository brandRepository)
+        public CommentController(ICommentRepository commentRepository)
         {
-            _brandRepository = brandRepository;
+            _commentRepository = commentRepository;
         }
 
         [HttpPost]
-        [Route("AddBrand")]
-        [Authorize(Roles = "SuperAdmin,Seller")]
-        public IActionResult AddBrand(BrandModel model)
+        [Route("AddComment")]
+        [Authorize(Roles = "Buyer")]
+        public IActionResult AddComment(AddCommentModel model)
         {
             try
             {
-
-                var Result = _brandRepository.AddBrands(model);
+                var Result = _commentRepository.AddComment(model);
 
                 return Ok(Result);
 
@@ -36,16 +35,18 @@ namespace Ecommerce.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("RemoveBrand")]
-        [Authorize(Roles = "SuperAdmin")]
-        public IActionResult RemoveBrand(RemoveBrandModel model)
+
+        [HttpPost]
+        [Route("DeleteComment")]
+        [Authorize(Roles = "Buyer")]
+        public IActionResult DeleteComment(DeleteCommentModel model)
         {
             try
             {
-                var Result = _brandRepository.RemoveBrand(model);
+                var Result = _commentRepository.DeleteComment(model);
 
                 return Ok(Result);
+
             }
             catch (Exception ex)
             {
@@ -53,15 +54,14 @@ namespace Ecommerce.Controllers
             }
         }
 
-
-        [HttpGet]
-        [Route("ShowAllBrand")]
-        [Authorize]
-        public IActionResult ShowAllBrand()
+        [HttpPut]
+        [Route("EditComment")]
+        [Authorize(Roles = "Buyer")]
+        public IActionResult EditComment(EditCommentModel model)
         {
             try
             {
-                var Result = _brandRepository.ShowAllBrands();
+                var Result = _commentRepository.EditComment(model);
 
                 return Ok(Result);
             }
@@ -69,6 +69,8 @@ namespace Ecommerce.Controllers
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
+
         }
+
     }
 }

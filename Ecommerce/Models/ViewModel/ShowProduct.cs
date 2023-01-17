@@ -1,8 +1,4 @@
-﻿using Ecommerce.Models.DbModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Ecommerce.Models.ViewModel
 {
@@ -10,7 +6,7 @@ namespace Ecommerce.Models.ViewModel
     {
         public int UserId { get; set; }
         public string UserName { get; set; }
-        public ProductData productData {get;set;}
+        public ProductData productData { get; set; }
     }
 
     public class ProductData
@@ -42,17 +38,17 @@ namespace Ecommerce.Models.ViewModel
         public string brandName { get; set; }
     }
 
-    public class CategoryL1 
+    public class CategoryL1
     {
         public string categoryL1 { get; set; }
     }
 
-    public class CategoryL2 
+    public class CategoryL2
     {
         public string categoryL2 { get; set; }
     }
 
-    public class CategoryL3 
+    public class CategoryL3
     {
         public string categoryL3 { get; set; }
     }

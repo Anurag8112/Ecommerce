@@ -93,8 +93,8 @@ namespace Ecommerce.Repository
                 EcommerceContext db = new EcommerceContext();
                 var IsWishlistExist = db.Wishlists.FirstOrDefault(x => x.UserId == model.UserId);
                 var isValidUser = db.Wishlists.FirstOrDefault(x => x.UserId == model.UserId);
-                var isValidProduct = db.WishlistItems.FirstOrDefault(x => x.ProdDetailId == model.ProductDetailsId && IsWishlistExist.Id==x.WishlistId);
-                
+                var isValidProduct = db.WishlistItems.FirstOrDefault(x => x.ProdDetailId == model.ProductDetailsId && IsWishlistExist.Id == x.WishlistId);
+
 
                 if (IsWishlistExist == null)
                 {
@@ -112,7 +112,7 @@ namespace Ecommerce.Repository
                     throw new Exception("Invalid ProductId");
                 }
 
-                if (WishlistItemCount>0)
+                if (WishlistItemCount > 0)
                 {
                     var removeProductFromWishlist = db.WishlistItems.FirstOrDefault(x => x.ProdDetailId == model.ProductDetailsId && x.WishlistId == IsWishlistExist.Id);
 
@@ -133,7 +133,7 @@ namespace Ecommerce.Repository
             {
                 throw new Exception(ex.Message);
             }
-           
+
         }
 
         public List<ShowProduct> ShowMyWishlist(ShowWishlist model)
@@ -145,7 +145,8 @@ namespace Ecommerce.Repository
 
                 return wishlist;
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
