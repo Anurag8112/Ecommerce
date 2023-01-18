@@ -145,6 +145,8 @@ namespace Ecommerce.Repository
                 };
 
 
+
+
                 tempProduct.ProductDetails.Add(productDetails);
                 tempProduct.UserProductMappings.Add(userProductMapping);
                 db.Products.Add(tempProduct);
