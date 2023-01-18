@@ -50,6 +50,7 @@ namespace Ecommerce.Models.DbModel
         public virtual DbSet<WishlistItem> WishlistItems { get; set; }
 
 
+
         //public override int SaveChanges()
         //{
         //    foreach (var entry in ChangeTracker.Entries())
@@ -401,13 +402,15 @@ namespace Ecommerce.Models.DbModel
                 entity.HasIndex(e => e.PaymentId, "UK")
                     .IsUnique();
 
-                entity.Property(e => e.Time)
-                    .IsRequired()
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.Total).HasColumnName("Total");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Address)
                     .WithMany(p => p.OrderDetails)
+                    .IsRequired()
                     .HasForeignKey(d => d.AddressId)
                     .HasConstraintName("FK_OrderDetails_Address");
 
@@ -428,12 +431,9 @@ namespace Ecommerce.Models.DbModel
             {
                 entity.ToTable("Order_Items");
 
-                entity.Property(e => e.Date).HasColumnType("date");
-
-                entity.Property(e => e.Time)
-                    .IsRequired()
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderItems)
@@ -450,15 +450,18 @@ namespace Ecommerce.Models.DbModel
 
             modelBuilder.Entity<PaymentDetail>(entity =>
             {
+                entity.Property(e => e.Amount).HasColumnName("Amount");
+
+                entity.Property(e => e.TransectionId).HasColumnName("TransectionId");
+
                 entity.Property(e => e.Status)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Time)
-                    .IsRequired()
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Product>(entity =>

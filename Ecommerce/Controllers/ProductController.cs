@@ -17,6 +17,7 @@ namespace Ecommerce.Controllers
             _productRepository = productRepository;
         }
 
+
         [HttpPost]
         [Route("Add-Product")]
         [Authorize(Roles = "Seller")]
@@ -34,6 +35,8 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
 
         [HttpGet]
         [Route("Show-ALL-Products")]
@@ -53,6 +56,8 @@ namespace Ecommerce.Controllers
             }
         }
 
+
+
         [HttpDelete]
         [Route("DeleteMyProduct")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -70,6 +75,8 @@ namespace Ecommerce.Controllers
             }
         }
 
+
+
         [HttpGet]
         [Route("{id}/Show-My-Products")]
         public IActionResult ShowMyProduct(int id)
@@ -81,6 +88,24 @@ namespace Ecommerce.Controllers
                 return Ok(result);
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+        [HttpGet]
+        [Route("GetProductComment")]
+        public IActionResult GetProductComment(CommentModel model)
+        {
+            try
+            {
+                var Result = _productRepository.ShowComments(model);
+
+                return Ok(Result);
+
+            }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }

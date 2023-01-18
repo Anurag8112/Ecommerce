@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Interface;
 using Ecommerce.Models.DbModel;
 using Ecommerce.Models.ViewModel;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -397,5 +398,39 @@ namespace Ecommerce.Repository
             throw new NotImplementedException();
         }
 
+        public List<ShowComments> ShowComments(CommentModel model)
+        {
+            try
+            {
+                EcommerceContext db = new EcommerceContext();
+                var Comments = db.Comments.Where(x => x.ProdId == model.ProdId).Include(x=>x.User);
+                
+
+                List<ShowComments> CommentList = new List<ShowComments>();
+
+                if (Comments == null)
+                {
+                    throw new Exception("There Is No Comment");
+                }
+                else
+                {
+                    foreach (var Comment in Comments)
+                    {
+                        var comment = new ShowComments()
+                        {
+                            User=Comment.User.UserName,
+                            Comment=Comment.Comment1
+                        };
+                        CommentList.Add(comment);
+                    }
+
+                    return CommentList;
+                }
+
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

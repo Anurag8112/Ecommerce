@@ -9,9 +9,9 @@ namespace Ecommerce.Models.DbModel
     {
         public int Id { get; set; }
         public int Amount { get; set; }
+        public string TransectionId { get; set; }
         public string Status { get; set; }
-        public byte[] Time { get; set; }
-
+        public DateTime CreatedOn { get; set; }
         public virtual OrderDetail OrderDetail { get; set; }
     }
 }
