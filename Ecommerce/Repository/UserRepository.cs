@@ -116,7 +116,7 @@ namespace Ecommerce.Repository
                     Password = Password.HashEncrypt(user.Password),
                     GenderId = user.GenderId,
                     IsVerified = false,
-                    IsActive = true
+                    Isactive = true
                 };
 
                 var tempRole = new UserRoleMapping()
@@ -194,7 +194,7 @@ namespace Ecommerce.Repository
 
                     var user = db.Users.First(x => x.UserName == credentials.UserName && x.Password == Password.HashEncrypt(credentials.Password));
 
-                    if (user.IsActive == false)
+                    if (user.Isactive == false)
                     {
                         throw new Exception("Your account is Deactivated Please Reactivate Your Account");
                     }
@@ -361,7 +361,7 @@ namespace Ecommerce.Repository
                     Email = user.Email,
                     Gender = GetGender(user.GenderId),
                     Role = GetUserRole(user.Id),
-                    IsActive = user.IsActive,
+                    IsActive = user.Isactive,
                     isVerified = user.IsVerified
                 };
                 return temp;
@@ -426,7 +426,7 @@ namespace Ecommerce.Repository
 
                 if (user.Password == Password.HashEncrypt(password))
                 {
-                    user.IsActive = false;
+                    user.Isactive = false;
                     db.Users.Update(user);
                     db.SaveChanges();
                 }

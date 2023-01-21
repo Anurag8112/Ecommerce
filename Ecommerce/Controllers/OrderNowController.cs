@@ -11,12 +11,10 @@ namespace Ecommerce.Controllers
     public class OrderNowController : Controller
     {
         private readonly IOrderRepository _OrderRepository;
-
         public OrderNowController(IOrderRepository OrderRepository)
         {
             _OrderRepository = OrderRepository;
         }
-
         [HttpPost]
         [Route("Order")]
       //  [Authorize(Roles = "SuperAdmin")]
@@ -25,9 +23,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _OrderRepository.OrderNow(model);
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {

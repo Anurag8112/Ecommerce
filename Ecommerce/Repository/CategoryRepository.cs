@@ -151,7 +151,7 @@ namespace Ecommerce.Repository
                     throw new Exception("Invalid Category Id");
                 }
 
-                var noFurtherProducts = db.Products.FirstOrDefault(x => x.CategoryL3Id == category.Id);
+                var noFurtherProducts = db.Products.FirstOrDefault(x => x.CategoryL3id == category.Id);
 
                 if (noFurtherProducts == null)
                 {
@@ -185,7 +185,7 @@ namespace Ecommerce.Repository
 
             foreach (var category in CategoryList)
             {
-                category.ProductCount = db.Products.Count(x => category.CategoryL1Id == x.CategoryL1Id);
+                category.ProductCount = db.Products.Count(x => category.CategoryL1Id == x.CategoryL1id);
             }
 
             return CategoryList;
@@ -207,7 +207,7 @@ namespace Ecommerce.Repository
 
             foreach (var category in CategoryList)
             {
-                category.ProductCount = db.Products.Count(x => category.CategoryL2Id == x.CategoryL2Id);
+                category.ProductCount = db.Products.Count(x => category.CategoryL2Id == x.CategoryL2id);
             }
 
             return CategoryList;
@@ -228,7 +228,7 @@ namespace Ecommerce.Repository
 
             foreach (var category in CategoryList)
             {
-                category.ProductCount = db.Products.Count(x => category.CategoryL3Id == x.CategoryL3Id);
+                category.ProductCount = db.Products.Count(x => category.CategoryL3Id == x.CategoryL3id);
             }
 
             return CategoryList;

@@ -114,9 +114,9 @@ namespace Ecommerce.Repository
                 {
                     ProdName = product.ProductName,
                     ProdDescription = product.ProductDescription,
-                    CategoryL1Id = product.CategoryLevel1Id,
-                    CategoryL2Id = product.CategoryLevel2Id,
-                    CategoryL3Id = product.CategoryLevel3Id,
+                    CategoryL1id = product.CategoryLevel1Id,
+                    CategoryL2id = product.CategoryLevel2Id,
+                    CategoryL3id = product.CategoryLevel3Id,
                     BrandId = product.BrandId
                 };
 
@@ -144,9 +144,15 @@ namespace Ecommerce.Repository
                     UserId = product.UserId
                 };
 
+                var inventryItem = new InventryItem()
+                {
+                    ProductDetailId = productDetails.ProdId,
+                    WarehouseId = product.WarehouseId,
+                    ProductCount = product.TotalStock,
+                    ProductDetail=productDetails
+                };
 
-
-
+                productDetails.InventryItems.Add(inventryItem);
                 tempProduct.ProductDetails.Add(productDetails);
                 tempProduct.UserProductMappings.Add(userProductMapping);
                 db.Products.Add(tempProduct);
@@ -166,7 +172,7 @@ namespace Ecommerce.Repository
             {
                 EcommerceContext db = new EcommerceContext();
                 var imageId = db.ProductImages.First(x => x.ImgId == id);
-                return imageId.Image.ToString();
+                return imageId.Image;
             }
             catch (Exception ex)
             {
@@ -197,9 +203,9 @@ namespace Ecommerce.Repository
                     var oneUserData = productMapping.First(x => x.ProdId == product.ProdId);
                     var oneProductData = productData.First(x => x.ProdId == product.ProdId);
                     var oneProductDetails = productDetails.First(x => x.ProdId == product.ProdId);
-                    var oneProductCategoryL1 = categoryL1.First(x => x.Id == oneProductData.CategoryL1Id);
-                    var oneProductCategoryL2 = categoryL2.First(x => x.Id == oneProductData.CategoryL2Id);
-                    var oneProductCategoryL3 = categoryL3.First(x => x.Id == oneProductData.CategoryL3Id);
+                    var oneProductCategoryL1 = categoryL1.First(x => x.Id == oneProductData.CategoryL1id);
+                    var oneProductCategoryL2 = categoryL2.First(x => x.Id == oneProductData.CategoryL2id);
+                    var oneProductCategoryL3 = categoryL3.First(x => x.Id == oneProductData.CategoryL3id);
                     var oneProductBrand = brands.First(x => x.Id == oneProductData.BrandId);
                     var oneProductSize = sizes.First(x => x.Id == oneProductDetails.SizeId);
                     var oneProductColor = color.First(x => x.Id == oneProductDetails.ColorId);
@@ -279,15 +285,15 @@ namespace Ecommerce.Repository
                                 join brand in db.Brands
                                 on products.BrandId equals brand.Id
                                 join categoryL1 in db.CategoryLevel1s
-                                on products.CategoryL1Id equals categoryL1.Id
+                                on products.CategoryL1id equals categoryL1.Id
                                 into completeProduct
                                 from compProd in completeProduct
                                 join categoryL2 in db.CategoryLevel2s
-                                on products.CategoryL2Id equals categoryL2.Id
+                                on products.CategoryL2id equals categoryL2.Id
                                 into withCategoryL2
                                 from categoryL2 in withCategoryL2
                                 join categoryL3 in db.CategoryLevel3s
-                                on products.CategoryL3Id equals categoryL3.Id
+                                on products.CategoryL3id equals categoryL3.Id
                                 into withCategoryL3
                                 from categoryL3 in withCategoryL3
                                 join productDetail in db.ProductDetails
@@ -405,8 +411,8 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
-                var Comments = db.Comments.Where(x => x.ProdId == model.ProdId).Include(x=>x.User);
-                
+                var Comments = db.Comments.Where(x => x.ProdId == model.ProdId).Include(x => x.User);
+
 
                 List<ShowComments> CommentList = new List<ShowComments>();
 
@@ -420,8 +426,8 @@ namespace Ecommerce.Repository
                     {
                         var comment = new ShowComments()
                         {
-                            User=Comment.User.UserName,
-                            Comment=Comment.Comment1
+                            User = Comment.User.UserName,
+                            Comment = Comment.Comment1
                         };
                         CommentList.Add(comment);
                     }
@@ -429,7 +435,8 @@ namespace Ecommerce.Repository
                     return CommentList;
                 }
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

@@ -27,5 +27,9 @@ namespace Ecommerce.Models.ViewModel
         public int SizeId { get; set; }
         [Required]
         public int ColorId { get; set; }
+        [Required]
+        public int WarehouseId { get; set; }
+        [Required]
+        public int TotalStock { get; set; }
     }
 }

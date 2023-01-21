@@ -11,5 +11,6 @@ namespace Ecommerce.Interface
         public bool AddWarehouse(WarehouseModel model);
         public bool EditWarehouseName(EditWarehouseModel model);
         public bool DeleteWarehouse(DeleteWarehouseModel model);
+        public List<ShowWarehouse> GetAllWarehouse();
     }
 }

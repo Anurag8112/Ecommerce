@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
@@ -14,8 +16,6 @@ namespace Ecommerce.Models.DbModel
             : base(options)
         {
         }
-
-
 
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
@@ -44,28 +44,10 @@ namespace Ecommerce.Models.DbModel
         public virtual DbSet<UserProductMapping> UserProductMappings { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<UserRoleMapping> UserRoleMappings { get; set; }
-        public virtual DbSet<UserWarehouseOrderDetailsMapping> UserWarehouseOrderDetailsMappings { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
+        public virtual DbSet<WarehouseOrderDetailsMapping> WarehouseOrderDetailsMappings { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
         public virtual DbSet<WishlistItem> WishlistItems { get; set; }
-
-
-
-        //public override int SaveChanges()
-        //{
-        //    foreach (var entry in ChangeTracker.Entries())
-        //    {
-        //        var entity = entry.Entity;
-
-        //        if (entry.State == EntityState.Deleted)
-        //        {
-        //            entry.State = EntityState.Modified;
-
-        //            entity.GetType().GetProperty("IsActive").SetValue(entity, false);
-        //        }
-        //    }
-        //    return base.SaveChanges();
-        //}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -149,17 +131,13 @@ namespace Ecommerce.Models.DbModel
             {
                 entity.ToTable("Cart");
 
-                entity.Property(e => e.ProdId).HasColumnName("ProdId");
-
-                entity.Property(e => e.CartId).HasColumnName("CartId");
-
-                entity.HasOne(d => d.Carts)
+                entity.HasOne(d => d.CartNavigation)
                     .WithMany(p => p.Carts)
                     .HasForeignKey(d => d.CartId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cart_Cart");
 
-                entity.HasOne(d => d.Product)
+                entity.HasOne(d => d.Prod)
                     .WithMany(p => p.Carts)
                     .HasForeignKey(d => d.ProdId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -296,19 +274,13 @@ namespace Ecommerce.Models.DbModel
 
             modelBuilder.Entity<DeliveryPartner>(entity =>
             {
+                entity.ToTable("DeliveryPartners");
+
                 entity.Property(e => e.DeliveryPartnerName)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("Delivery_Partner_Name");
-
-                entity.Property(e => e.HubManagerId).HasColumnName("Hub_Manager_Id");
-
-                entity.HasOne(d => d.HubManager)
-                    .WithMany(p => p.DeliveryPartners)
-                    .HasForeignKey(d => d.HubManagerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_DeliveryPartners_User_Warehouse_OrderDetails_Mapping");
             });
 
             modelBuilder.Entity<DpHub>(entity =>
@@ -376,17 +348,15 @@ namespace Ecommerce.Models.DbModel
             {
                 entity.ToTable("Inventry_Item");
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
                 entity.Property(e => e.ProductCount).HasColumnName("Product_Count");
 
                 entity.Property(e => e.ProductDetailId).HasColumnName("Product_Detail_Id");
 
                 entity.Property(e => e.WarehouseId).HasColumnName("Warehouse_Id");
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.InventryItem)
-                    .HasForeignKey<InventryItem>(d => d.Id)
+                entity.HasOne(d => d.ProductDetail)
+                    .WithMany(p => p.InventryItems)
+                    .HasForeignKey(d => d.ProductDetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Inventry_Item_Product_Detail");
 
@@ -402,16 +372,12 @@ namespace Ecommerce.Models.DbModel
                 entity.HasIndex(e => e.PaymentId, "UK")
                     .IsUnique();
 
-                entity.Property(e => e.Total).HasColumnName("Total");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .IsRequired();
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Address)
                     .WithMany(p => p.OrderDetails)
-                    .IsRequired()
                     .HasForeignKey(d => d.AddressId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Address");
 
                 entity.HasOne(d => d.Payment)
@@ -431,37 +397,27 @@ namespace Ecommerce.Models.DbModel
             {
                 entity.ToTable("Order_Items");
 
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .IsRequired();
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderItems)
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Items_OrderDetails");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.OrderItems)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Items_Products");
             });
 
             modelBuilder.Entity<PaymentDetail>(entity =>
             {
-                entity.Property(e => e.Amount).HasColumnName("Amount");
-
-                entity.Property(e => e.TransectionId).HasColumnName("TransectionId");
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .IsRequired();
+                entity.Property(e => e.TransectionId)
+                    .IsRequired()
+                    .HasMaxLength(16);
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -472,9 +428,16 @@ namespace Ecommerce.Models.DbModel
 
                 entity.Property(e => e.BrandId).HasColumnName("Brand_Id");
 
+                entity.Property(e => e.CategoryL1id).HasColumnName("CategoryL1Id");
+
+                entity.Property(e => e.CategoryL2id).HasColumnName("CategoryL2Id");
+
+                entity.Property(e => e.CategoryL3id).HasColumnName("CategoryL3Id");
+
                 entity.Property(e => e.ProdDescription)
                     .IsRequired()
                     .HasMaxLength(500)
+                    .IsUnicode(false)
                     .HasColumnName("Prod_Description");
 
                 entity.Property(e => e.ProdName)
@@ -489,21 +452,21 @@ namespace Ecommerce.Models.DbModel
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Brand");
 
-                entity.HasOne(d => d.Category1)
+                entity.HasOne(d => d.CategoryL1)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CategoryL1Id)
+                    .HasForeignKey(d => d.CategoryL1id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Category_Level1");
 
-                entity.HasOne(d => d.Category2)
+                entity.HasOne(d => d.CategoryL2)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CategoryL2Id)
+                    .HasForeignKey(d => d.CategoryL2id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Category_Level2");
 
-                entity.HasOne(d => d.Category3)
+                entity.HasOne(d => d.CategoryL3)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CategoryL3Id)
+                    .HasForeignKey(d => d.CategoryL3id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Category_Level3");
             });
@@ -588,20 +551,11 @@ namespace Ecommerce.Models.DbModel
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(int.MaxValue)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Phone)
                     .IsRequired()
                     .HasMaxLength(12)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IsVerified)
-                    .IsRequired()
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IsActive)
-                    .IsRequired()
                     .IsUnicode(false);
 
                 entity.Property(e => e.UserName)
@@ -678,35 +632,6 @@ namespace Ecommerce.Models.DbModel
                     .HasConstraintName("FK_User_Role_Mapping_User");
             });
 
-            modelBuilder.Entity<UserWarehouseOrderDetailsMapping>(entity =>
-            {
-                entity.ToTable("User_Warehouse_OrderDetails_Mapping");
-
-                entity.Property(e => e.OrderDetailId).HasColumnName("Order_Detail_Id");
-
-                entity.Property(e => e.UserRoleMappingId).HasColumnName("User_Role_Mapping_Id");
-
-                entity.Property(e => e.WarehouseId).HasColumnName("Warehouse_Id");
-
-                entity.HasOne(d => d.OrderDetail)
-                    .WithMany(p => p.UserWarehouseOrderDetailsMappings)
-                    .HasForeignKey(d => d.OrderDetailId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_User_Warehouse_OrderDetails_Mapping_OrderDetails");
-
-                entity.HasOne(d => d.UserRoleMapping)
-                    .WithMany(p => p.UserWarehouseOrderDetailsMappings)
-                    .HasForeignKey(d => d.UserRoleMappingId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_User_Warehouse_OrderDetails_Mapping_User");
-
-                entity.HasOne(d => d.Warehouse)
-                    .WithMany(p => p.UserWarehouseOrderDetailsMappings)
-                    .HasForeignKey(d => d.WarehouseId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_User_Warehouse_OrderDetails_Mapping_Warehouse");
-            });
-
             modelBuilder.Entity<Warehouse>(entity =>
             {
                 entity.ToTable("Warehouse");
@@ -716,6 +641,31 @@ namespace Ecommerce.Models.DbModel
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("Warehouse_Name");
+            });
+
+            modelBuilder.Entity<WarehouseOrderDetailsMapping>(entity =>
+            {
+                entity.ToTable("PK_Warehouse_OrderDetails_Mapping");
+
+                entity.ToTable("Warehouse_OrderDetails_Mapping");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.OrderDetailId).HasColumnName("Order_Detail_Id");
+
+                entity.Property(e => e.WarehouseId).HasColumnName("Warehouse_Id");
+
+                entity.HasOne(d => d.OrderDetail)
+                    .WithMany()
+                    .HasForeignKey(d => d.OrderDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User_Warehouse_OrderDetails_Mapping_OrderDetails");
+
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany()
+                    .HasForeignKey(d => d.WarehouseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User_Warehouse_OrderDetails_Mapping_Warehouse");
             });
 
             modelBuilder.Entity<Wishlist>(entity =>

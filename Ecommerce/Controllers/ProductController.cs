@@ -11,24 +11,19 @@ namespace Ecommerce.Controllers
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
-
         public ProductController(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
-
-
         [HttpPost]
         [Route("Add-Product")]
-        [Authorize(Roles = "Seller")]
+        // [Authorize(Roles = "Seller")]
         public IActionResult Addproducts(ProductModel product)
         {
             try
             {
                 var Result = _productRepository.AddProduct(product);
-
                 return Ok("Product Added");
-
             }
             catch (Exception ex)
             {
@@ -46,18 +41,13 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _productRepository.ShowAllProducts();
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
-
-
         [HttpDelete]
         [Route("DeleteMyProduct")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -66,7 +56,6 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _productRepository.DeleteProduct(model);
-
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -74,9 +63,6 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error Occured: " + ex.Message);
             }
         }
-
-
-
         [HttpGet]
         [Route("{id}/Show-My-Products")]
         public IActionResult ShowMyProduct(int id)
@@ -84,7 +70,6 @@ namespace Ecommerce.Controllers
             try
             {
                 var result = _productRepository.ShowMyProducts(id);
-
                 return Ok(result);
             }
             catch (Exception ex)
@@ -92,9 +77,6 @@ namespace Ecommerce.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
-
         [HttpGet]
         [Route("GetProductComment")]
         public IActionResult GetProductComment(CommentModel model)
@@ -102,10 +84,9 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _productRepository.ShowComments(model);
-
                 return Ok(Result);
-
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

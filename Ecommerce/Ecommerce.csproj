@@ -22,8 +22,5 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="Twilio.AspNet.Core" Version="5.77.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\DbModel\" />
-  </ItemGroup>
 
 </Project>

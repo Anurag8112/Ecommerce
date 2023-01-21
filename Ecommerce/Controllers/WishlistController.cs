@@ -11,12 +11,10 @@ namespace Ecommerce.Controllers
     public class WishlistController : Controller
     {
         private readonly IWishlistRepository _wishlistRepository;
-
         public WishlistController(IWishlistRepository wishlistRepository)
         {
             _wishlistRepository = wishlistRepository;
         }
-
         [HttpPost]
         [Route("AddToWishList")]
         [Authorize(Roles = "Buyer")]
@@ -25,12 +23,10 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _wishlistRepository.AddToWishlist(model);
-
                 if (Result == false)
                 {
                     return Ok("Product Already Exist in Wishlist");
                 }
-
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -38,7 +34,6 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
         [HttpDelete]
         [Route("DeleteFromWishList")]
         [Authorize(Roles = "Buyer")]
@@ -47,16 +42,13 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _wishlistRepository.RemoveFromWishlist(model);
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
         [HttpGet]
         [Route("ShowMyWishlist")]
         [Authorize(Roles = "Buyer")]
@@ -65,9 +57,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _wishlistRepository.ShowMyWishlist(model);
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {

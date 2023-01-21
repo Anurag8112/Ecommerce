@@ -13,7 +13,13 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
-                var Product = db.ProductDetails.FirstOrDefault(x => x.Id == model.ProdId);
+                var Product = db.ProductDetails.FirstOrDefault(x => x.ProdId == model.ProdId && x.SizeId==model.SizeId && x.ColorId==model.ColorId);
+
+                var IsOutofStock = db.InventryItems.FirstOrDefault(x => x.ProductDetailId == Product.Id);
+                if (IsOutofStock.ProductCount == 0)
+                {
+                    throw new Exception("Product Is Out Of Stock");
+                }
                 if (Product == null)
                 {
                     throw new Exception("Invalid Product Id");
@@ -44,9 +50,18 @@ namespace Ecommerce.Repository
                     Quantity = model.Quantity,
                     CreatedOn = DateTime.Now,
                 };
-                
+                var inventry = db.InventryItems.FirstOrDefault(x => x.ProductDetailId == Product.Id);
+                var WarehouseOrderMapping = new WarehouseOrderDetailsMapping()
+                {
+                      WarehouseId=inventry.WarehouseId,
+                      OrderDetailId= OrderDetails.Id,
+                      OrderDetail= OrderDetails
+                };
+                db.WarehouseOrderDetailsMappings.Add(WarehouseOrderMapping);
                 OrderDetails.OrderItems.Add(OrderItems);
                 db.OrderDetails.Add(OrderDetails);
+                inventry.ProductCount--;
+                db.InventryItems.Update(inventry);
                 db.SaveChanges();
                 return true;
             }

@@ -11,12 +11,10 @@ namespace Ecommerce.Controllers
     public class CommentController : Controller
     {
         private readonly ICommentRepository _commentRepository;
-
         public CommentController(ICommentRepository commentRepository)
         {
             _commentRepository = commentRepository;
         }
-
         [HttpPost]
         [Route("AddComment")]
         [Authorize(Roles = "Buyer")]
@@ -25,17 +23,13 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _commentRepository.AddComment(model);
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
-
         [HttpPost]
         [Route("DeleteComment")]
         [Authorize(Roles = "Buyer")]
@@ -44,16 +38,13 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _commentRepository.DeleteComment(model);
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
         [HttpPut]
         [Route("EditComment")]
         [Authorize(Roles = "Buyer")]
@@ -62,15 +53,12 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _commentRepository.EditComment(model);
-
                 return Ok(Result);
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
-
         }
-
     }
 }

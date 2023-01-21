@@ -49,6 +49,8 @@ namespace Ecommerce
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IOrderRepository, OrderNowRepository>();
             services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+            services.AddScoped<IDeliveryPartnerRepository, DeliveryPartnerRepository>();
+            services.AddScoped<IHubRepository, HubRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();

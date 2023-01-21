@@ -11,7 +11,7 @@ namespace Ecommerce.Models.DbModel
         public int CartId { get; set; }
         public int ProdId { get; set; }
 
-        public virtual CartTable Carts { get; set; }
-        public virtual ProductDetail Product{ get; set; }
+        public virtual CartTable CartNavigation { get; set; }
+        public virtual ProductDetail Prod { get; set; }
     }
 }

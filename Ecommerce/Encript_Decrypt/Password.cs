@@ -12,13 +12,9 @@ namespace Ecommerce.Encript_Decrypt
             {
                 return "";
             }
-
             SHA512 hashSvc = SHA512.Create();
-
             byte[] hash = hashSvc.ComputeHash(Encoding.UTF8.GetBytes(password));
-
             var EncodedPassword = BitConverter.ToString(hash).Replace("-", "");
-
             return EncodedPassword;
         }
     }

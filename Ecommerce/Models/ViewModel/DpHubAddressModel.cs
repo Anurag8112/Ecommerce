@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-#nullable disable
-
-namespace Ecommerce.Models.DbModel
+namespace Ecommerce.Models.ViewModel
 {
-    public partial class DpHubAddress
+    public class DpHubAddressModel
     {
-        public int Id { get; set; }
-        public int DpHubId { get; set; }
+        [Required]
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
+        [Required]
         public string City { get; set; }
+        [Required]
         public string State { get; set; }
+        [Required]
         public string Country { get; set; }
+        [Required]
         public int PostalCode { get; set; }
+        [Required]
+        [StringLength(10)]
         public string Phone { get; set; }
-
-        public virtual DpHub DpHub { get; set; }
     }
 }

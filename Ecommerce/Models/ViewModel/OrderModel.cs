@@ -20,6 +20,10 @@ namespace Ecommerce.Models.ViewModel
         [Required]
         public int ProdId { get; set; }
         [Required]
+        public int SizeId { get; set; }
+        [Required]
+        public int ColorId { get; set; }
+        [Required]
         public string PaymentStatus { get; set; }
 
     }

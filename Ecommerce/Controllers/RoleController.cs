@@ -11,12 +11,10 @@ namespace Ecommerce.Controllers
     public class RoleController : Controller
     {
         private readonly IRoleRepository _roleRepository;
-
         public RoleController(IRoleRepository roleRepository)
         {
             _roleRepository = roleRepository;
         }
-
         [HttpPost]
         [Route("AddRole")]
         [Authorize(Roles = "SuperAdmin")]
@@ -25,16 +23,13 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _roleRepository.AddRole(model);
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
         [HttpDelete]
         [Route("DeleteRole")]
         [Authorize(Roles = "SuperAdmin")]
@@ -43,16 +38,13 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _roleRepository.DeleteRole(model);
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
         [HttpGet]
         [Route("ShowAllRoles")]
         [Authorize(Roles = "SuperAdmin")]
@@ -61,9 +53,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _roleRepository.GetAllRoles();
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {

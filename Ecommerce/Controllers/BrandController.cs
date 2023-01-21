@@ -11,12 +11,10 @@ namespace Ecommerce.Controllers
     public class BrandController : Controller
     {
         private readonly IBrandRepository _brandRepository;
-
         public BrandController(IBrandRepository brandRepository)
         {
             _brandRepository = brandRepository;
         }
-
         [HttpPost]
         [Route("AddBrand")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -24,18 +22,14 @@ namespace Ecommerce.Controllers
         {
             try
             {
-
                 var Result = _brandRepository.AddBrands(model);
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
         [HttpDelete]
         [Route("RemoveBrand")]
         [Authorize(Roles = "SuperAdmin")]
@@ -44,7 +38,6 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _brandRepository.RemoveBrand(model);
-
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -52,8 +45,6 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
-
         [HttpGet]
         [Route("ShowAllBrand")]
         [Authorize]
@@ -62,7 +53,6 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _brandRepository.ShowAllBrands();
-
                 return Ok(Result);
             }
             catch (Exception ex)

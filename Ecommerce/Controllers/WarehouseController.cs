@@ -10,12 +10,10 @@ namespace Ecommerce.Controllers
     public class WarehouseController : Controller
     {
         private readonly IWarehouseRepository _warehouseRepository;
-
         public WarehouseController(IWarehouseRepository warehouseRepository)
         {
             _warehouseRepository = warehouseRepository;
         }
-
         [HttpPost]
         [Route("AddWarehouse")]
         // [Authorize(Roles = "WarehouseManager,SuperAdmin")]
@@ -24,7 +22,6 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _warehouseRepository.AddWarehouse(model);
-
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -40,7 +37,6 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _warehouseRepository.EditWarehouseName(model);
-
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -50,7 +46,7 @@ namespace Ecommerce.Controllers
         }
         [HttpDelete]
         [Route("DeleteWarehouse")]
-        // [Authorize(Roles = "WarehouseManager,SuperAdmin")]
+        //[Authorize(Roles = "WarehouseManager,SuperAdmin")]
         public IActionResult DeleteWarehouse(DeleteWarehouseModel model)
         {
             try
@@ -63,6 +59,20 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error Occured : " + ex.Message);
             }
         }
-
+        [HttpGet]
+        [Route("GetAllWarehouse")]
+        //[Authorize(Roles = "WarehouseManager,SuperAdmin")]
+        public IActionResult GetAllWarehouse()
+        {
+            try
+            {
+                var Result = _warehouseRepository.GetAllWarehouse();
+                return Ok(Result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error Occured : " + ex.Message);
+            }
+        }
     }
 }

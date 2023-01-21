@@ -11,12 +11,10 @@ namespace Ecommerce.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
-
         public UserController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
-
         [HttpPost]
         [Route("Sign-up")]
         public IActionResult SignUp(SignUpModel user)
@@ -38,19 +36,13 @@ namespace Ecommerce.Controllers
 
             return Ok(result);
         }
-
-
-
         [HttpPost]
         [Route("Verify-User")]
         public bool VerifyUser(string otp)
         {
             var res = _userRepository.VerifyUser(otp);
-
             return res;
         }
-
-
         [HttpPost]
         [Route("Sign-in")]
         public IActionResult Login(LoginModel credentials)
@@ -58,16 +50,12 @@ namespace Ecommerce.Controllers
             try
             {
                 var details = _userRepository.Login(credentials);
-
-
                 if (details.isVerified == false)
                 {
                     details.UserName = credentials.UserName;
                     details.ExceptionMessage = "User Not Verified Please redirect to Verify API";
-
                     return Ok(details.ExceptionMessage);
                 }
-
                 return Ok(details);
             }
             catch (Exception ex)
@@ -75,9 +63,6 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
-
-
         [HttpPost]
         [Route("Update-Address")]
         [Authorize(Roles = "SuperAdmin")]
@@ -87,14 +72,9 @@ namespace Ecommerce.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             var result = _userRepository.AddUserAddress(userId, userAddress);
-
             return Ok(result);
         }
-
-
-
         [HttpGet]
         [Route("GetAllUsers")]
         [Authorize(Roles = "SuperAdmin")]
@@ -104,16 +84,12 @@ namespace Ecommerce.Controllers
             {
                 var Result = _userRepository.GetAllUsers();
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
-
-
         [HttpGet]
         [Route("User/{id}")]
         [Authorize(Roles = "SuperAdmin")]
@@ -122,38 +98,28 @@ namespace Ecommerce.Controllers
             try
             {
                 var result = _userRepository.GetUserById(id);
-
                 return Ok(result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
-
-
         [HttpGet]
         [Route("User/{id}/Addresses")]
         [Authorize]
         public IActionResult GetUserAddresses(int id)
         {
-
             try
             {
                 var Result = _userRepository.GetUserAddresses(id);
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
-
-
         [HttpDelete]
         [Route("User/{id}/Delete")]
         [Authorize]

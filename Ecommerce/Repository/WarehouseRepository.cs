@@ -2,6 +2,7 @@
 using Ecommerce.Models.DbModel;
 using Ecommerce.Models.ViewModel;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Ecommerce.Repository
@@ -77,6 +78,34 @@ namespace Ecommerce.Repository
                 throw new Exception(ex.Message);
             }
         }
-
+        public List<ShowWarehouse> GetAllWarehouse()
+        {
+            try
+            {
+                EcommerceContext db = new EcommerceContext();
+                List<ShowWarehouse> WarehouseList = new List<ShowWarehouse>();
+                foreach (var warehouse in db.Warehouses)
+                {
+                    var newWarehouse = new ShowWarehouse()
+                    {
+                        WarehouseId = warehouse.Id,
+                        WarehouseName = warehouse.WarehouseName
+                    };
+                    WarehouseList.Add(newWarehouse);
+                }
+                if (WarehouseList != null)
+                {
+                    return WarehouseList;
+                }
+                else
+                {
+                    throw new Exception("There is no Warehouse");
+                } 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

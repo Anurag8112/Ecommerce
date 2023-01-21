@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-#nullable disable
-
-namespace Ecommerce.Models.DbModel
+namespace Ecommerce.Models.ViewModel
 {
-    public partial class DpHubAddress
+    public class ShowDpHubAddressModel
     {
         public int Id { get; set; }
-        public int DpHubId { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public string City { get; set; }
@@ -17,7 +15,5 @@ namespace Ecommerce.Models.DbModel
         public string Country { get; set; }
         public int PostalCode { get; set; }
         public string Phone { get; set; }
-
-        public virtual DpHub DpHub { get; set; }
     }
 }

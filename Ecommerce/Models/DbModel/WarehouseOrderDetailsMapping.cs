@@ -5,14 +5,13 @@ using System.Collections.Generic;
 
 namespace Ecommerce.Models.DbModel
 {
-    public partial class PaymentDetail
+    public partial class WarehouseOrderDetailsMapping
     {
         public int Id { get; set; }
-        public int Amount { get; set; }
-        public string Status { get; set; }
-        public string TransectionId { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public int WarehouseId { get; set; }
+        public int OrderDetailId { get; set; }
 
         public virtual OrderDetail OrderDetail { get; set; }
+        public virtual Warehouse Warehouse { get; set; }
     }
 }

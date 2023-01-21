@@ -9,6 +9,8 @@ namespace Ecommerce.Models.DbModel
     {
         public ProductDetail()
         {
+            Carts = new HashSet<Cart>();
+            InventryItems = new HashSet<InventryItem>();
             WishlistItems = new HashSet<WishlistItem>();
         }
 
@@ -21,8 +23,8 @@ namespace Ecommerce.Models.DbModel
         public virtual Color Color { get; set; }
         public virtual Product Prod { get; set; }
         public virtual Size Size { get; set; }
-        public virtual InventryItem InventryItem { get; set; }
-        public virtual ICollection<WishlistItem> WishlistItems { get; set; }
         public virtual ICollection<Cart> Carts { get; set; }
+        public virtual ICollection<InventryItem> InventryItems { get; set; }
+        public virtual ICollection<WishlistItem> WishlistItems { get; set; }
     }
 }

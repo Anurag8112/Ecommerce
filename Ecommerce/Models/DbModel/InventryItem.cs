@@ -12,7 +12,7 @@ namespace Ecommerce.Models.DbModel
         public int WarehouseId { get; set; }
         public int ProductCount { get; set; }
 
-        public virtual ProductDetail IdNavigation { get; set; }
+        public virtual ProductDetail ProductDetail { get; set; }
         public virtual Warehouse Warehouse { get; set; }
     }
 }

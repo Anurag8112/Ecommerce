@@ -11,12 +11,10 @@ namespace Ecommerce.Controllers
     public class CartController : Controller
     {
         private readonly ICartRepository _cartRepository;
-
         public CartController(ICartRepository cartRepository)
         {
             _cartRepository = cartRepository;
         }
-
         [HttpPost]
         [Route("AddToCart")]
         [Authorize(Roles = "Buyer")]
@@ -25,12 +23,10 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _cartRepository.AddToCart(model);
-
                 if (Result == false)
                 {
                     return Ok("Product Already Exist in Cart");
                 }
-
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -38,7 +34,6 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
         [HttpDelete]
         [Route("RemoveFromCart")]
         [Authorize(Roles = "Buyer")]
@@ -47,15 +42,12 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _cartRepository.RemoveFromCart(model);
-
                 return Ok(Result);
-
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
     }
 }
