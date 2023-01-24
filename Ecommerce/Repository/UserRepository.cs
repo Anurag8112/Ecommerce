@@ -46,7 +46,6 @@ namespace Ecommerce.Repository
             return strrandom;
         }
 
-
         public UserGender GetGender(int id)
         {
             EcommerceContext db = new EcommerceContext();
@@ -78,7 +77,6 @@ namespace Ecommerce.Repository
             {
                 return null;
             }
-
         }
 
         public UserRole GetUserRole(int userId)
@@ -90,7 +88,6 @@ namespace Ecommerce.Repository
                 var role = db.UserRoleMappings.FirstOrDefault(x => x.UserId == userId);
 
                 return GetRole(role.RoleId);
-
             }
             catch (Exception)
             {
@@ -132,8 +129,9 @@ namespace Ecommerce.Repository
 
                 var sentOtp = SendOtp(newnum);
 
-                _context.HttpContext.Session.SetInt32("Id", tempuser.Id);
+                
                 var response = db.SaveChanges();
+                _context.HttpContext.Session.SetInt32("Id", tempuser.Id);
                 return "User Created";
 
             }
@@ -166,7 +164,6 @@ namespace Ecommerce.Repository
             return false;
         }
 
-
         public bool SendOtp(string number)
         {
             string otp = Generate_otp();
@@ -181,7 +178,6 @@ namespace Ecommerce.Repository
             return true;
         }
 
-
         public UserDetailsModel Login(LoginModel credentials)
         {
             EcommerceContext db = new EcommerceContext();
@@ -190,8 +186,6 @@ namespace Ecommerce.Repository
             {
                 if (credentials != null && !string.IsNullOrWhiteSpace(credentials.UserName) && !string.IsNullOrWhiteSpace(credentials.Password))
                 {
-
-
                     var user = db.Users.First(x => x.UserName == credentials.UserName && x.Password == Password.HashEncrypt(credentials.Password));
 
                     if (user.Isactive == false)
@@ -228,7 +222,6 @@ namespace Ecommerce.Repository
                             claims.Add(new Claim(ClaimTypes.Role, role.Role));
                         }
 
-
                         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.key));
 
                         var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -240,7 +233,6 @@ namespace Ecommerce.Repository
                                 expires: DateTime.Now.AddMinutes(5),
                                 signingCredentials: signIn
                                 );
-
 
                         if (user.IsVerified == false)
                         {

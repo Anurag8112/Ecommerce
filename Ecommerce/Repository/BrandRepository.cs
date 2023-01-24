@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Interface;
 using Ecommerce.Models.DbModel;
 using Ecommerce.Models.ViewModel;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,11 @@ namespace Ecommerce.Repository
 {
     public class BrandRepository : IBrandRepository
     {
+        private readonly ILogger<BrandRepository> _logger;
+        public BrandRepository(IBrandRepository brandRepository, ILogger<BrandRepository> logger)
+        {
+            _logger = logger;
+        }
         public bool AddBrands(BrandModel model)
         {
             try
@@ -22,10 +28,12 @@ namespace Ecommerce.Repository
 
                 db.Brands.Add(brand);
                 db.SaveChanges();
+                _logger.LogInformation("---------------Brand Added---------------");
                 return true;
             }
             catch (Exception ex)
             {
+                _logger.LogInformation(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -40,6 +48,7 @@ namespace Ecommerce.Repository
 
                 if (isValidId == null)
                 {
+                    _logger.LogInformation("---------------Invalid BrandId---------------");
                     throw new Exception("Invalid BrandId");
                 }
 

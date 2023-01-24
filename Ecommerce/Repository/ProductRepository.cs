@@ -54,7 +54,6 @@ namespace Ecommerce.Repository
                 EcommerceContext db = new EcommerceContext();
                 var categoryL3 = db.CategoryLevel3s.First(x => x.Id == id);
                 return categoryL3;
-
             }
             catch (Exception ex)
             {
@@ -75,7 +74,6 @@ namespace Ecommerce.Repository
                 throw new Exception(ex.Message);
             }
         }
-
         public Size GetSizeById(int id)
         {
             try
@@ -276,107 +274,25 @@ namespace Ecommerce.Repository
             {
                 EcommerceContext db = new EcommerceContext();
 
+                var UserProdMapping = db.UserProductMappings.Where(x => x.UserId == userId);
+                var user = db.Users.FirstOrDefault(x => x.Id == userId);
+                List<ShowProduct> ProductList = new List<ShowProduct>();
 
-                var myProduct = from userMapping in db.UserProductMappings
-                                join product in db.Products
-                                on userMapping.ProdId equals product.ProdId
-                                into productGroup
-                                from products in productGroup
-                                join brand in db.Brands
-                                on products.BrandId equals brand.Id
-                                join categoryL1 in db.CategoryLevel1s
-                                on products.CategoryL1id equals categoryL1.Id
-                                into completeProduct
-                                from compProd in completeProduct
-                                join categoryL2 in db.CategoryLevel2s
-                                on products.CategoryL2id equals categoryL2.Id
-                                into withCategoryL2
-                                from categoryL2 in withCategoryL2
-                                join categoryL3 in db.CategoryLevel3s
-                                on products.CategoryL3id equals categoryL3.Id
-                                into withCategoryL3
-                                from categoryL3 in withCategoryL3
-                                join productDetail in db.ProductDetails
-                                on products.ProdId equals productDetail.ProdId
-                                into withProdDetails
-                                from details in withProdDetails
-                                join color in db.Colors
-                                on details.ColorId equals color.Id
-                                into withcolor
-                                from color in withcolor
-                                join size in db.Sizes
-                                on details.SizeId equals size.Id
-                                into withsize
-                                from size in withsize
-                                join image in db.ProductImages
-                                on products.ProdId equals image.ProdId
-                                into withImage
-                                from image in withImage
-                                where userMapping.UserId == userId
-                                select new { products, brand, compProd, categoryL2, categoryL3, details, color, size, img = withImage.Where(x => x.ProdId == products.ProdId) };
-
-
-                List<ShowProduct> showProductList = new List<ShowProduct>();
-
-                var user = db.Users.First(x => x.Id == userId);
-
-                foreach (var product in myProduct)
+                foreach (var product in UserProdMapping.Include(x=>x.Prod))
                 {
-                    List<string> images = new List<string>();
-
-                    foreach (var image in product.img)
+                    var showProducts = new ShowProduct()
                     {
-                        images.Add(image.Image);
-                    }
-
-                    var completeProduct = new ShowProduct()
-                    {
-
-                        UserId = user.Id,
-                        UserName = user.UserName,
-
-                        productData = new ProductData()
+                        UserId=userId,
+                        UserName=user.UserName,
+                        productData=new ProductData()
                         {
-                            productName = product.products.ProdName,
-                            productDesc = product.products.ProdDescription,
-                            productDetail = new ProdDetail()
-                            {
-                                price = product.details.Price,
-                                productColor = new ProductColors()
-                                {
-                                    colorName = product.color.Color1
-                                },
-                                productSize = new ProductSizes()
-                                {
-                                    sizeName = product.size.Size1
-                                },
-                            },
-                            brand = new Brands()
-                            {
-                                brandName = product.brand.BrandName
-                            },
-                            categoryL1 = new CategoryL1()
-                            {
-                                categoryL1 = product.compProd.CategoryL1
-                            },
-                            categoryL2 = new CategoryL2()
-                            {
-                                categoryL2 = product.categoryL2.CategoryL2
-                            },
-                            categoryL3 = new CategoryL3()
-                            {
-                                categoryL3 = product.categoryL3.CategoryL3
-                            },
-                            productImage = new ProductImages()
-                            {
-                                image = images
-                            }
+                            productName=product.Prod.ProdName,
+                            productDesc=product.Prod.ProdDescription,
                         }
                     };
-                    showProductList.Add(completeProduct);
+                    ProductList.Add(showProducts);
                 }
-
-                return showProductList;
+                return ProductList;
             }
             catch (Exception ex)
             {

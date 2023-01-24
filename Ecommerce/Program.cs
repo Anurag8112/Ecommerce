@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog.Web;
+using System.IO;
 
 namespace Ecommerce
 {
@@ -7,6 +10,10 @@ namespace Ecommerce
     {
         public static void Main(string[] args)
         {
+            var logPath = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+            NLog.GlobalDiagnosticsContext.Set("LogDirectory", logPath);
+
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -15,6 +22,10 @@ namespace Ecommerce
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                }).ConfigureLogging(opt=> {
+                    opt.ClearProviders();
+                    opt.SetMinimumLevel(LogLevel.Trace);
+
+                }).UseNLog();
     }
 }

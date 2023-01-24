@@ -44,6 +44,21 @@ namespace Ecommerce.Controllers
             return res;
         }
         [HttpPost]
+        [Route("ResendOTP")]
+        public IActionResult ResendOTP(string MobileNo)
+        {
+            try
+            {
+                var Result = _userRepository.SendOtp(MobileNo);
+                return Ok(Result);
+
+            }catch(Exception ex)
+            {
+                return BadRequest("Error occurred: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
         [Route("Sign-in")]
         public IActionResult Login(LoginModel credentials)
         {

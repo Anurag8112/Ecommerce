@@ -2,6 +2,7 @@
 using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace Ecommerce.Controllers
@@ -11,13 +12,16 @@ namespace Ecommerce.Controllers
     public class BrandController : Controller
     {
         private readonly IBrandRepository _brandRepository;
-        public BrandController(IBrandRepository brandRepository)
+        private readonly ILogger<BrandController> _logger;
+
+        public BrandController(IBrandRepository brandRepository, ILogger<BrandController> logger)
         {
+            _logger = logger;
             _brandRepository = brandRepository;
         }
         [HttpPost]
         [Route("AddBrand")]
-        [Authorize(Roles = "SuperAdmin,Seller")]
+        //[Authorize(Roles = "SuperAdmin,Seller")]
         public IActionResult AddBrand(BrandModel model)
         {
             try
@@ -27,6 +31,7 @@ namespace Ecommerce.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
