@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Interface;
 using Ecommerce.Models.DbModel;
 using Ecommerce.Models.ViewModel;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,13 @@ namespace Ecommerce.Repository
 {
     public class CategoryRepository : ICategoryRepository
     {
+        public readonly ILogger<CategoryRepository> _logger;
+
+        public CategoryRepository(ILogger<CategoryRepository> logger)
+        {
+            _logger = logger;
+        }
+
         public bool AddCategoryL1(CategoryModelL1 model)
         {
             try
@@ -27,6 +35,7 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -50,6 +59,7 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -72,6 +82,7 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -103,6 +114,7 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -134,6 +146,7 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -166,72 +179,93 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
 
         public List<ShowCategoryL1Model> ShowCategoryL1()
         {
-            EcommerceContext db = new EcommerceContext();
-
-            List<ShowCategoryL1Model> CategoryList = new List<ShowCategoryL1Model>();
-
-            var AllCategory = db.CategoryLevel1s.Select(x => new ShowCategoryL1Model { CategoryL1Id = x.Id, CategoryL1Name = x.CategoryL1 });
-
-            foreach (var category in AllCategory)
+            try
             {
-                CategoryList.Add(category);
-            }
+                EcommerceContext db = new EcommerceContext();
 
-            foreach (var category in CategoryList)
+                List<ShowCategoryL1Model> CategoryList = new List<ShowCategoryL1Model>();
+
+                var AllCategory = db.CategoryLevel1s.Select(x => new ShowCategoryL1Model { CategoryL1Id = x.Id, CategoryL1Name = x.CategoryL1 });
+
+                foreach (var category in AllCategory)
+                {
+                    CategoryList.Add(category);
+                }
+
+                foreach (var category in CategoryList)
+                {
+                    category.ProductCount = db.Products.Count(x => category.CategoryL1Id == x.CategoryL1id);
+                }
+
+                return CategoryList;
+            }
+            catch (Exception ex)
             {
-                category.ProductCount = db.Products.Count(x => category.CategoryL1Id == x.CategoryL1id);
+                throw new Exception(ex.Message);
             }
-
-            return CategoryList;
-
         }
 
         public List<ShowCategoryL2Model> ShowCategoryL2()
         {
-            EcommerceContext db = new EcommerceContext();
-
-            List<ShowCategoryL2Model> CategoryList = new List<ShowCategoryL2Model>();
-
-            var AllCategory = db.CategoryLevel2s.Select(x => new ShowCategoryL2Model { CategoryL2Id = x.Id, CategoryL2Name = x.CategoryL2 });
-
-            foreach (var category in AllCategory)
+            try
             {
-                CategoryList.Add(category);
-            }
+                EcommerceContext db = new EcommerceContext();
 
-            foreach (var category in CategoryList)
+                List<ShowCategoryL2Model> CategoryList = new List<ShowCategoryL2Model>();
+
+                var AllCategory = db.CategoryLevel2s.Select(x => new ShowCategoryL2Model { CategoryL2Id = x.Id, CategoryL2Name = x.CategoryL2 });
+
+                foreach (var category in AllCategory)
+                {
+                    CategoryList.Add(category);
+                }
+
+                foreach (var category in CategoryList)
+                {
+                    category.ProductCount = db.Products.Count(x => category.CategoryL2Id == x.CategoryL2id);
+                }
+
+                return CategoryList;
+            }
+            catch (Exception ex)
             {
-                category.ProductCount = db.Products.Count(x => category.CategoryL2Id == x.CategoryL2id);
+                throw new Exception(ex.Message);
             }
-
-            return CategoryList;
         }
 
         public List<ShowCategoryL3Model> ShowCategoryL3()
         {
-            EcommerceContext db = new EcommerceContext();
-
-            List<ShowCategoryL3Model> CategoryList = new List<ShowCategoryL3Model>();
-
-            var AllCategory = db.CategoryLevel3s.Select(x => new ShowCategoryL3Model { CategoryL3Id = x.Id, CategoryL3Name = x.CategoryL3 });
-
-            foreach (var category in AllCategory)
+            try
             {
-                CategoryList.Add(category);
-            }
+                EcommerceContext db = new EcommerceContext();
 
-            foreach (var category in CategoryList)
+                List<ShowCategoryL3Model> CategoryList = new List<ShowCategoryL3Model>();
+
+                var AllCategory = db.CategoryLevel3s.Select(x => new ShowCategoryL3Model { CategoryL3Id = x.Id, CategoryL3Name = x.CategoryL3 });
+
+                foreach (var category in AllCategory)
+                {
+                    CategoryList.Add(category);
+                }
+
+                foreach (var category in CategoryList)
+                {
+                    category.ProductCount = db.Products.Count(x => category.CategoryL3Id == x.CategoryL3id);
+                }
+
+                return CategoryList;
+            }
+            catch (Exception ex)
             {
-                category.ProductCount = db.Products.Count(x => category.CategoryL3Id == x.CategoryL3id);
+                throw new Exception(ex.Message);
             }
-
-            return CategoryList;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,13 @@ namespace Ecommerce.Controllers
     public class DpHubController : Controller
     {
         private readonly IHubRepository _hubRepository;
-        public DpHubController(IHubRepository hubRepository)
+        private readonly ILogger<DpHubController> _logger;
+        public DpHubController(IHubRepository hubRepository, ILogger<DpHubController> logger)
         {
+            _logger = logger;
             _hubRepository = hubRepository;
         }
+
         [HttpPost]
         [Route("AddDpHub")]
         [Authorize(Roles = "SuperAdmin,HubManager")]
@@ -26,6 +30,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _hubRepository.AddDPHub(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             } 
             catch(Exception ex)
@@ -41,6 +46,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _hubRepository.RemoveDpHub(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -56,6 +62,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _hubRepository.EditDpHub(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -71,6 +78,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _hubRepository.ShowDpHub();
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)

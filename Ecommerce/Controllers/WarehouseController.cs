@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Interface;
 using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace Ecommerce.Controllers
@@ -10,8 +11,10 @@ namespace Ecommerce.Controllers
     public class WarehouseController : Controller
     {
         private readonly IWarehouseRepository _warehouseRepository;
-        public WarehouseController(IWarehouseRepository warehouseRepository)
+        private readonly ILogger<WarehouseController> _logger;
+        public WarehouseController(IWarehouseRepository warehouseRepository, ILogger<WarehouseController> logger)
         {
+            _logger = logger;
             _warehouseRepository = warehouseRepository;
         }
         [HttpPost]
@@ -22,6 +25,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _warehouseRepository.AddWarehouse(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -37,6 +41,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _warehouseRepository.EditWarehouseName(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -52,6 +57,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _warehouseRepository.DeleteWarehouse(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -67,6 +73,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _warehouseRepository.GetAllWarehouse();
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)

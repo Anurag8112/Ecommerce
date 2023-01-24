@@ -2,6 +2,7 @@
 using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace Ecommerce.Controllers
@@ -11,10 +12,13 @@ namespace Ecommerce.Controllers
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
-        public ProductController(IProductRepository productRepository)
+        private readonly ILogger<ProductController> _logger;
+        public ProductController(IProductRepository productRepository, ILogger<ProductController> logger)
         {
+            _logger = logger;
             _productRepository = productRepository;
         }
+
         [HttpPost]
         [Route("Add-Product")]
         // [Authorize(Roles = "Seller")]
@@ -23,6 +27,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _productRepository.AddProduct(product);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok("Product Added");
             }
             catch (Exception ex)
@@ -41,6 +46,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _productRepository.ShowAllProducts();
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -56,6 +62,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _productRepository.DeleteProduct(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -70,6 +77,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var result = _productRepository.ShowMyProducts(id);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(result);
             }
             catch (Exception ex)
@@ -84,6 +92,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _productRepository.ShowComments(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Interface;
 using Ecommerce.Models.DbModel;
 using Ecommerce.Models.ViewModel;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,12 @@ namespace Ecommerce.Repository
 {
     public class CartRepository : ICartRepository
     {
+        private readonly ILogger<CartRepository> _logger;
+        public CartRepository(ILogger<CartRepository> logger)
+        {
+            _logger = logger;
+        }
+
         public bool AddToCart(CartModel model)
         {
             try
@@ -25,17 +32,20 @@ namespace Ecommerce.Repository
 
                     if (CartItemCount == 15)
                     {
+                        _logger.LogError("---------------Cart has been full-----------------");
                         throw new Exception("Your Cart has been full");
                     }
                 }
 
                 if (isValidUser == null)
                 {
+                    _logger.LogError("---------------Invalid UserId-----------------");
                     throw new Exception("Invalid UserId");
                 }
 
                 if (isValidProduct == null)
                 {
+                    _logger.LogError("---------------Invalid ProductId-----------------");
                     throw new Exception("Invalid ProductId");
                 }
 
@@ -55,6 +65,7 @@ namespace Ecommerce.Repository
                     tempCart.Carts.Add(CartItem);
                     db.CartTables.Add(tempCart);
                     db.SaveChanges();
+                    _logger.LogInformation("---------------Item add to cart-----------------");
                     return true;
                 }
                 else
@@ -71,7 +82,7 @@ namespace Ecommerce.Repository
 
                         db.Carts.Add(CartItems);
                         db.SaveChanges();
-
+                        _logger.LogInformation("---------------Item add to cart-----------------");
                         return true;
                     }
                     else
@@ -98,17 +109,20 @@ namespace Ecommerce.Repository
 
                 if (IsCartExist == null)
                 {
+                    _logger.LogError("---------------WishList is Empty-----------------");
                     throw new Exception("Wishlist is Empty");
                 }
                 var CartItemCount = db.Carts.Count(x => x.CartId == IsCartExist.Id);
 
                 if (isValidUser == null)
                 {
+                    _logger.LogError("---------------Invalid UserId-----------------");
                     throw new Exception("Invalid UserId");
                 }
 
                 if (isValidProduct == null)
                 {
+                    _logger.LogError("---------------Invalid ProductId-----------------");
                     throw new Exception("Invalid ProductId");
                 }
 
@@ -125,6 +139,7 @@ namespace Ecommerce.Repository
                 {
                     db.CartTables.Remove(IsCartExist);
                     db.SaveChanges();
+                    _logger.LogInformation("-----------------------Item Removed From Cart------------------");
                 }
 
                 return true;

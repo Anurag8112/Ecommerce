@@ -2,6 +2,7 @@
 using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace Ecommerce.Controllers
@@ -11,10 +12,14 @@ namespace Ecommerce.Controllers
     public class CartController : Controller
     {
         private readonly ICartRepository _cartRepository;
-        public CartController(ICartRepository cartRepository)
+        private readonly ILogger<CartController> _logger;
+
+        public CartController(ICartRepository cartRepository,ILogger<CartController> logger)
         {
+            _logger = logger;
             _cartRepository = cartRepository;
         }
+
         [HttpPost]
         [Route("AddToCart")]
         [Authorize(Roles = "Buyer")]
@@ -25,8 +30,10 @@ namespace Ecommerce.Controllers
                 var Result = _cartRepository.AddToCart(model);
                 if (Result == false)
                 {
+                    _logger.LogInformation("------------------Product Already Exist in Cart-----------------");
                     return Ok("Product Already Exist in Cart");
                 }
+                _logger.LogInformation("------------------API Respond Successfully-----------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -34,6 +41,8 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpDelete]
         [Route("RemoveFromCart")]
         [Authorize(Roles = "Buyer")]
@@ -42,6 +51,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _cartRepository.RemoveFromCart(model);
+                _logger.LogInformation("------------------API Respond Successfully-----------------");
                 return Ok(Result);
             }
             catch (Exception ex)

@@ -19,6 +19,8 @@ namespace Ecommerce.Controllers
             _logger = logger;
             _brandRepository = brandRepository;
         }
+
+
         [HttpPost]
         [Route("AddBrand")]
         //[Authorize(Roles = "SuperAdmin,Seller")]
@@ -27,14 +29,16 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _brandRepository.AddBrands(model);
+                _logger.LogInformation("-----------API Respond Successfully----------");
                 return Ok(Result);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpDelete]
         [Route("RemoveBrand")]
         [Authorize(Roles = "SuperAdmin")]
@@ -43,6 +47,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _brandRepository.RemoveBrand(model);
+                _logger.LogInformation("-----------API Respond Successfully----------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -50,6 +55,8 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpGet]
         [Route("ShowAllBrand")]
         [Authorize]
@@ -58,6 +65,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _brandRepository.ShowAllBrands();
+                _logger.LogInformation("-----------API Respond Successfully----------");
                 return Ok(Result);
             }
             catch (Exception ex)

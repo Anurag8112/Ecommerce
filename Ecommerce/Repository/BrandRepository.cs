@@ -33,7 +33,6 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -97,7 +96,6 @@ namespace Ecommerce.Repository
                 }
 
                 return BrandList;
-
             }
             catch (Exception ex)
             {

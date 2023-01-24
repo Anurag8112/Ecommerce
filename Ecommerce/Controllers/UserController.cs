@@ -2,6 +2,7 @@
 using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace Ecommerce.Controllers
@@ -11,37 +12,39 @@ namespace Ecommerce.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly ILogger<UserController> _logger;
+        public UserController(IUserRepository userRepository, ILogger<UserController> logger)
         {
+            _logger = logger;
             _userRepository = userRepository;
         }
+
         [HttpPost]
         [Route("Sign-up")]
         public IActionResult SignUp(SignUpModel user)
         {
-            string result;
             try
             {
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
-
-                result = _userRepository.UserSignUp(user);
+                var result = _userRepository.UserSignUp(user);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }
-
-            return Ok(result);
         }
         [HttpPost]
         [Route("Verify-User")]
-        public bool VerifyUser(string otp)
+        public IActionResult VerifyUser(string otp)
         {
             var res = _userRepository.VerifyUser(otp);
-            return res;
+            _logger.LogInformation("-------------API Respond Successfully-------------");
+            return Ok(res);
         }
         [HttpPost]
         [Route("ResendOTP")]
@@ -50,6 +53,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _userRepository.SendOtp(MobileNo);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
 
             }catch(Exception ex)
@@ -71,6 +75,7 @@ namespace Ecommerce.Controllers
                     details.ExceptionMessage = "User Not Verified Please redirect to Verify API";
                     return Ok(details.ExceptionMessage);
                 }
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(details);
             }
             catch (Exception ex)
@@ -88,6 +93,7 @@ namespace Ecommerce.Controllers
                 return BadRequest(ModelState);
             }
             var result = _userRepository.AddUserAddress(userId, userAddress);
+            _logger.LogInformation("-------------API Respond Successfully-------------");
             return Ok(result);
         }
         [HttpGet]
@@ -98,6 +104,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _userRepository.GetAllUsers();
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -113,6 +120,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var result = _userRepository.GetUserById(id);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(result);
             }
             catch (Exception ex)
@@ -128,6 +136,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _userRepository.GetUserAddresses(id);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -135,6 +144,7 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
         [HttpDelete]
         [Route("User/{id}/Delete")]
         [Authorize]
@@ -143,6 +153,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _userRepository.DeactivateUser(id, password);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)

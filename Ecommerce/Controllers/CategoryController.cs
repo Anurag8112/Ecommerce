@@ -2,6 +2,7 @@
 using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace Ecommerce.Controllers
@@ -11,10 +12,13 @@ namespace Ecommerce.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryRepository categoryRepository)
+        private readonly ILogger<CategoryController> _logger;
+        public CategoryController(ICategoryRepository categoryRepository, ILogger<CategoryController> logger)
         {
+            _logger = logger;
             _categoryRepository = categoryRepository;
         }
+
         [HttpPost]
         [Route("AddCategoryL1")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -23,6 +27,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _categoryRepository.AddCategoryL1(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -30,6 +35,8 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpPost]
         [Route("AddCategoryL2")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -38,6 +45,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _categoryRepository.AddCategoryL2(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -45,6 +53,8 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpPost]
         [Route("AddCategoryL3")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -53,6 +63,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _categoryRepository.AddCategoryL3(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -60,6 +71,8 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpDelete]
         [Route("DeleteCategoryL1")]
         [Authorize(Roles = "SuperAdmin")]
@@ -68,6 +81,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _categoryRepository.RemoveCategoryL1(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -75,6 +89,8 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpDelete]
         [Route("DeleteCategoryL2")]
         [Authorize(Roles = "SuperAdmin")]
@@ -83,6 +99,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _categoryRepository.RemoveCategoryL2(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -90,6 +107,8 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpDelete]
         [Route("DeleteCategoryL3")]
         [Authorize(Roles = "SuperAdmin")]
@@ -98,6 +117,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _categoryRepository.RemoveCategoryL3(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -105,6 +125,8 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpGet]
         [Route("ShowCategoryL1")]
         [Authorize]
@@ -113,13 +135,17 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _categoryRepository.ShowCategoryL1();
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpGet]
         [Route("ShowCategoryL2")]
         [Authorize]
@@ -128,13 +154,17 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _categoryRepository.ShowCategoryL2();
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
+
         [HttpGet]
         [Route("ShowCategoryL3")]
         [Authorize]
@@ -143,10 +173,12 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _categoryRepository.ShowCategoryL3();
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }

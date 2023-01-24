@@ -2,6 +2,7 @@
 using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace Ecommerce.Controllers
@@ -11,10 +12,14 @@ namespace Ecommerce.Controllers
     public class WishlistController : Controller
     {
         private readonly IWishlistRepository _wishlistRepository;
-        public WishlistController(IWishlistRepository wishlistRepository)
+        private readonly ILogger<WishlistController> _logger;
+
+        public WishlistController(IWishlistRepository wishlistRepository, ILogger<WishlistController> logger)
         {
+            _logger = logger;
             _wishlistRepository = wishlistRepository;
         }
+
         [HttpPost]
         [Route("AddToWishList")]
         [Authorize(Roles = "Buyer")]
@@ -25,8 +30,10 @@ namespace Ecommerce.Controllers
                 var Result = _wishlistRepository.AddToWishlist(model);
                 if (Result == false)
                 {
+                    _logger.LogInformation("-------------Product Already Exist in WishList-------------");
                     return Ok("Product Already Exist in Wishlist");
                 }
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -42,6 +49,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _wishlistRepository.RemoveFromWishlist(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -57,6 +65,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _wishlistRepository.ShowMyWishlist(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
             catch (Exception ex)
