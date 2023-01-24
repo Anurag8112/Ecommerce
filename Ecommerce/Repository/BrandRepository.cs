@@ -33,7 +33,7 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(ex.ToString());
+                _logger.LogError(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -48,7 +48,7 @@ namespace Ecommerce.Repository
 
                 if (isValidId == null)
                 {
-                    _logger.LogInformation("---------------Invalid BrandId---------------");
+                    _logger.LogError("---------------Invalid BrandId---------------");
                     throw new Exception("Invalid BrandId");
                 }
 
@@ -60,15 +60,18 @@ namespace Ecommerce.Repository
 
                     db.Brands.Remove(DeleteBrand);
                     db.SaveChanges();
+                    _logger.LogInformation("---------------Brand Removed---------------");
                     return true;
                 }
                 else
                 {
+                    _logger.LogInformation("---------------Brand can not Removed Removed---------------");
                     throw new Exception("There Is Many Product With This Brand. Please Remove All Products With This Brand Before Deleting This Brand");
                 }
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -98,6 +101,7 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 throw new Exception(ex.Message);
             }
         }
