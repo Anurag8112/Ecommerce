@@ -70,7 +70,7 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -80,6 +80,7 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("-------------DB Connection Established-------------");
 
                 List<ShowBrands> BrandList = new List<ShowBrands>();
 
@@ -95,11 +96,12 @@ namespace Ecommerce.Repository
                     brands.ItemCount = db.Products.Count(x => brands.BrandId == x.BrandId);
                 }
 
+                _logger.LogInformation("-------------Brand Show Successfully-------------");
                 return BrandList;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }

@@ -2,6 +2,7 @@
 using Ecommerce.Models.DbModel;
 using Ecommerce.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,18 @@ namespace Ecommerce.Repository
 {
     public class HubRepository : IHubRepository
     {
+        private readonly ILogger<HubRepository> _logger;
+        public HubRepository(ILogger<HubRepository> logger)
+        {
+            _logger = logger;
+        }
+
         public bool AddDPHub(AddDpHubModel model)
         {
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("---------------DB COnnection Established------------");
                 var DpHub = new DpHub()
                 {
                     DpId = model.DPId,
@@ -32,10 +40,12 @@ namespace Ecommerce.Repository
                 };
                 db.DpHubs.Add(DpHub);
                 db.SaveChanges();
+                _logger.LogInformation("-------------DP Hub Added--------------");
                 return true;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -44,6 +54,7 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("------------DB Connection Established----------");
                 var DpHub = db.DpHubs.FirstOrDefault(x => x.Id == model.DpHubId);
                 var DpHubAddress = db.DpHubAddresses.FirstOrDefault(x => x.DpHubId == model.DpHubId);
 
@@ -63,10 +74,12 @@ namespace Ecommerce.Repository
                 db.DpHubAddresses.Update(DpHubAddress);
                 db.DpHubs.Update(DpHub);
                 db.SaveChanges();
+                _logger.LogInformation("----------DP Hub Edited Successfully-----------");
                 return true;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }

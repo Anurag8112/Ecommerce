@@ -133,6 +133,7 @@ namespace Ecommerce.Repository
                     db.Carts.Remove(removeProductFromCart);
                     db.SaveChanges();
                     CartItemCount--;
+                    _logger.LogInformation("-------------Inventry Updated Successfully-------------");
                 }
 
                 if (CartItemCount == 0)

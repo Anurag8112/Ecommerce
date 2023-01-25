@@ -30,6 +30,7 @@ namespace Ecommerce.Repository
 
                 db.CategoryLevel1s.Add(categoryL1);
                 db.SaveChanges();
+                _logger.LogInformation("-------------Category Level 1 Added-------------");
                 return true;
 
             }
@@ -54,6 +55,7 @@ namespace Ecommerce.Repository
 
                 db.CategoryLevel2s.Add(categoryL2);
                 db.SaveChanges();
+                _logger.LogInformation("-------------Category Level 2 Added-------------");
                 return true;
 
             }
@@ -78,6 +80,7 @@ namespace Ecommerce.Repository
 
                 db.CategoryLevel3s.Add(categoryL3);
                 db.SaveChanges();
+                _logger.LogInformation("-------------Category Level 3 Added-------------");
                 return true;
             }
             catch (Exception ex)
@@ -96,6 +99,7 @@ namespace Ecommerce.Repository
                 var category = db.CategoryLevel1s.FirstOrDefault(x => x.Id == model.Id);
                 if (category == null)
                 {
+                    _logger.LogError("--------------Invalid Category Id------------");
                     throw new Exception("Invalid Category Id");
                 }
 
@@ -105,6 +109,7 @@ namespace Ecommerce.Repository
                 {
                     db.CategoryLevel1s.Remove(category);
                     db.SaveChanges();
+                    _logger.LogInformation("-------------Category Level 1 Removed-------------");
                     return true;
                 }
                 else
@@ -128,6 +133,7 @@ namespace Ecommerce.Repository
                 var category = db.CategoryLevel2s.FirstOrDefault(x => x.Id == model.Id);
                 if (category == null)
                 {
+                    _logger.LogError("-------------Invalid Category level 2--------------");
                     throw new Exception("Invalid Category Id");
                 }
 
@@ -137,6 +143,7 @@ namespace Ecommerce.Repository
                 {
                     db.CategoryLevel2s.Remove(category);
                     db.SaveChanges();
+                    _logger.LogInformation("-------------Category Level 2 Removed-------------");
                     return true;
                 }
                 else
@@ -147,7 +154,7 @@ namespace Ecommerce.Repository
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                throw new Exception(ex.Message);
+                throw new Exception(ex.InnerException.ToString());
             }
         }
 
@@ -161,6 +168,7 @@ namespace Ecommerce.Repository
 
                 if (category == null)
                 {
+                    _logger.LogError("------------Invalid Category Id level 3-------------");
                     throw new Exception("Invalid Category Id");
                 }
 
@@ -170,6 +178,7 @@ namespace Ecommerce.Repository
                 {
                     db.CategoryLevel3s.Remove(category);
                     db.SaveChanges();
+                    _logger.LogInformation("-------------Category Level 3 Removed-------------");
                     return true;
                 }
                 else
@@ -189,6 +198,7 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogTrace("--------DB Connection established-------------");
 
                 List<ShowCategoryL1Model> CategoryList = new List<ShowCategoryL1Model>();
 
@@ -204,6 +214,7 @@ namespace Ecommerce.Repository
                     category.ProductCount = db.Products.Count(x => category.CategoryL1Id == x.CategoryL1id);
                 }
 
+                _logger.LogInformation("-------------Category Level 1 Succesfully added in the product List-------------");
                 return CategoryList;
             }
             catch (Exception ex)
@@ -232,6 +243,7 @@ namespace Ecommerce.Repository
                     category.ProductCount = db.Products.Count(x => category.CategoryL2Id == x.CategoryL2id);
                 }
 
+                _logger.LogInformation("-------------Category Level 2 Succesfully added in the product List-------------");
                 return CategoryList;
             }
             catch (Exception ex)
@@ -260,6 +272,7 @@ namespace Ecommerce.Repository
                     category.ProductCount = db.Products.Count(x => category.CategoryL3Id == x.CategoryL3id);
                 }
 
+                _logger.LogInformation("-------------Category Level 3 Succesfully added in the product List-------------");
                 return CategoryList;
             }
             catch (Exception ex)
