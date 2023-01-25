@@ -2,6 +2,7 @@
 using Ecommerce.Models.DbModel;
 using Ecommerce.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,13 @@ namespace Ecommerce.Repository
 {
     public class ProductRepository : IProductRepository
     {
+        private readonly ILogger<ProductRepository> _logger;
+
+
         public readonly IUserRepository _userRepository;
-        public ProductRepository(IUserRepository userRepository)
+        public ProductRepository(IUserRepository userRepository, ILogger<ProductRepository> logger)
         {
+            _logger = logger;
             _userRepository = userRepository;
         }
 
@@ -21,13 +26,16 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("----------DB Connection Established-----------");
 
                 var categoryL1 = db.CategoryLevel1s.First(x => x.Id == id);
 
+                _logger.LogInformation("----------Category Level 1 Retrieved---------");
                 return categoryL1;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -37,11 +45,14 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("----------DB Connection Established-----------");
                 var categoryL2 = db.CategoryLevel2s.First(x => x.Id == id);
+                _logger.LogInformation("----------Category Level 2 Retrieved---------");
                 return categoryL2;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
 
@@ -52,11 +63,14 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("----------DB Connection Established-----------");
                 var categoryL3 = db.CategoryLevel3s.First(x => x.Id == id);
+                _logger.LogInformation("----------Category Level 3 Retrieved---------");
                 return categoryL3;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -66,11 +80,14 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("----------DB Connection Established-----------");
                 var Brand = db.Brands.First(x => x.Id == id);
+                _logger.LogInformation("----------Brand Name Retrieved---------");
                 return Brand;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -79,11 +96,14 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("----------DB Connection Established-----------");
                 var Size = db.Sizes.First(x => x.Id == id);
+                _logger.LogInformation("----------Size Retrieved---------");
                 return Size;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -93,11 +113,14 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("----------DB Connection Established-----------");
                 var Color = db.Colors.First(x => x.Id == id);
+                _logger.LogInformation("----------Color Retrieved---------");
                 return Color;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }
@@ -107,7 +130,7 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
-
+                _logger.LogInformation("----------DB Connection Established-----------");
                 var tempProduct = new Product()
                 {
                     ProdName = product.ProductName,
@@ -117,7 +140,6 @@ namespace Ecommerce.Repository
                     CategoryL3id = product.CategoryLevel3Id,
                     BrandId = product.BrandId
                 };
-
                 foreach (var image in product.Images)
                 {
                     var productImage = new ProductImage()
@@ -155,11 +177,12 @@ namespace Ecommerce.Repository
                 tempProduct.UserProductMappings.Add(userProductMapping);
                 db.Products.Add(tempProduct);
                 db.SaveChanges();
-
+                _logger.LogInformation("----------Product Added-----------");
                 return true;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }

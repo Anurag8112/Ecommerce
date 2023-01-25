@@ -112,6 +112,7 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("-----------DB Connection established-------------");
                 List<ShowDpHub> DpHubList = new List<ShowDpHub>();
                 foreach (var hub in db.DpHubs.Include(x=>x.DpHubAddress))
                 {
@@ -133,10 +134,12 @@ namespace Ecommerce.Repository
                     };
                     DpHubList.Add(ShowDpHub);
                 }
+                _logger.LogInformation("-------------Product Added to list-------------");
                 return DpHubList;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }

@@ -4,6 +4,7 @@ using Ecommerce.Models.DbModel;
 using Ecommerce.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -23,10 +24,13 @@ namespace Ecommerce.Repository
         private readonly ITwilioRestClient _client;
         private readonly IHttpContextAccessor _context;
         private readonly IRefreshTokenGenerator _refreshTokenGenerator;
+        private readonly ILogger<UserRepository> _logger;
 
-        public UserRepository(ITwilioRestClient client, IHttpContextAccessor context, IConfiguration configuration, IRefreshTokenGenerator refreshTokenGenerator)
-        {
+        public UserRepository(ITwilioRestClient client, IHttpContextAccessor context, IConfiguration configuration, 
+                               IRefreshTokenGenerator refreshTokenGenerator, ILogger<UserRepository> logger)
+        { 
             _client = client;
+            _logger = logger;
             _context = context;
             _configuration = configuration;
             _refreshTokenGenerator = refreshTokenGenerator;
@@ -43,22 +47,24 @@ namespace Ecommerce.Repository
                 if (!strrandom.Contains(charArr.GetValue(pos).ToString())) strrandom += charArr.GetValue(pos);
                 else i--;
             }
+            _logger.LogInformation("----------Otp Generated----------");
             return strrandom;
         }
 
         public UserGender GetGender(int id)
         {
-            EcommerceContext db = new EcommerceContext();
             try
             {
+                EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("---------DB Connection Established----------");
                 var gender = db.UserGenders.FirstOrDefault(x => x.Id == id);
-
+                _logger.LogInformation("---------Gender Retrieved--------");
                 return gender;
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return null;
+                _logger.LogError(ex.InnerException.ToString());
+                throw new Exception(ex.Message);
             }
         }
 
@@ -67,15 +73,15 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
-
+                _logger.LogInformation("---------DB Connection Established----------");
                 var role = db.UserRoles.FirstOrDefault(x => x.Id == id);
-
+                _logger.LogInformation("---------Role Retrieved--------");
                 return role;
-
             }
-            catch (Exception)
+            catch (Exception ex )
             {
-                return null;
+                _logger.LogError(ex.InnerException.ToString());
+                throw new Exception(ex.Message);
             }
         }
 
@@ -84,14 +90,15 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
-
+                _logger.LogInformation("---------DB Connection Established----------");
                 var role = db.UserRoleMappings.FirstOrDefault(x => x.UserId == userId);
-
+                _logger.LogInformation("---------User Role Retrieved--------");
                 return GetRole(role.RoleId);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return null;
+                _logger.LogError(ex.InnerException.ToString());
+                throw new Exception(ex.Message);
             }
         }
 
@@ -101,7 +108,7 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
-
+                _logger.LogInformation("---------DB Connection Established----------");
                 var tempuser = new User()
                 {
                     UserName = user.UserName,
@@ -128,15 +135,17 @@ namespace Ecommerce.Repository
                 db.Users.Add(tempuser);
 
                 var sentOtp = SendOtp(newnum);
-
                 
+
                 var response = db.SaveChanges();
                 _context.HttpContext.Session.SetInt32("Id", tempuser.Id);
+                _logger.LogInformation("-----------User Registered--------");
                 return "User Created";
 
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message.ToString());
             }
 
@@ -144,24 +153,37 @@ namespace Ecommerce.Repository
 
         public bool VerifyUser(string userotp)
         {
-
-            EcommerceContext db = new EcommerceContext();
-            var otp = _context.HttpContext.Session.GetString("otp");
-            var userId = _context.HttpContext.Session.GetInt32("Id");
-
-
-            var res = db.Users.First(x => x.Id == userId);
-
-            if (userId != null && userotp == otp)
+            try
             {
+                EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("---------DB Connection Established-----------");
+                var otp = _context.HttpContext.Session.GetString("otp");
+                var userId = _context.HttpContext.Session.GetInt32("Id");
 
-                res.IsVerified = true;
-                db.Update(res);
-                db.SaveChanges();
-                return true;
+
+                var res = db.Users.First(x => x.Id == userId);
+
+                if (userId != null && userotp == otp)
+                {
+
+                    res.IsVerified = true;
+                    db.Update(res);
+                    db.SaveChanges();
+                    _logger.LogInformation("----------User Verified---------");
+                    return true;
+                }
+                else
+                {
+                    _logger.LogError("---------Invalid Otp---------");
+                    return false;
+                }
             }
-
-            return false;
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.InnerException.ToString());
+                throw new Exception(ex.Message);
+            }
+            
         }
 
         public bool SendOtp(string number)
@@ -174,35 +196,37 @@ namespace Ecommerce.Repository
                        client: _client
                 );
             _context.HttpContext.Session.SetString("otp", otp);
-
+            _logger.LogInformation("--------Otp Sent--------");
             return true;
         }
 
         public UserDetailsModel Login(LoginModel credentials)
         {
-            EcommerceContext db = new EcommerceContext();
-            UserDetailsModel newuser = new UserDetailsModel();
             try
             {
+                EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("----------DB Connection Established-----------");
+                UserDetailsModel newuser = new UserDetailsModel();
+
                 if (credentials != null && !string.IsNullOrWhiteSpace(credentials.UserName) && !string.IsNullOrWhiteSpace(credentials.Password))
                 {
                     var user = db.Users.First(x => x.UserName == credentials.UserName && x.Password == Password.HashEncrypt(credentials.Password));
 
                     if (user.Isactive == false)
                     {
+                        _logger.LogError("---------------User Acoount Deactivated------------");
                         throw new Exception("Your account is Deactivated Please Reactivate Your Account");
                     }
 
                     if (user == null)
                     {
+                        _logger.LogError("---------------Invalid Username or Password------------");
                         throw new Exception("Invalid UserName or Password");
                     }
 
                     var jwt = _configuration.GetSection("Jwt").Get<Jwt>();
                     var userRoleMapping = db.UserRoleMappings.First(x => x.UserId == user.Id);
                     var userRole = db.UserRoles.Where(x => x.Id == userRoleMapping.RoleId);
-
-
 
                     if (user != null)
                     {
@@ -233,6 +257,7 @@ namespace Ecommerce.Repository
                                 expires: DateTime.Now.AddMinutes(5),
                                 signingCredentials: signIn
                                 );
+                        _logger.LogInformation("-----------JWT Token Generated-----------");
 
                         if (user.IsVerified == false)
                         {
@@ -255,27 +280,25 @@ namespace Ecommerce.Repository
                             Role = GetUserRole(user.Id),
                             Token = new JwtSecurityTokenHandler().WriteToken(token),
                             RefreshToken = _refreshTokenGenerator.GenerateToken()
-
                         };
                     }
-
                 }
+                _logger.LogInformation("-----------User Log In-----------");
+                return newuser;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
-            }
-
-            return newuser;
+            }            
         }
-
 
         public string AddUserAddress(int userId, AddressModel userAddress)
         {
-            EcommerceContext db = new EcommerceContext();
-
             try
             {
+                EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("----------DB Connection Established-----------");
                 var user = db.Users.First(x => x.Id == userId);
 
                 if (user != null)
@@ -292,26 +315,31 @@ namespace Ecommerce.Repository
                     };
 
                     user.Addresses.Add(address);
-                    var response = db.SaveChanges();
+                    db.SaveChanges();
+                    return "Address Added Successfully";
+                }
+                else
+                {
+                    _logger.LogError("----------User Not Found---------");
+                    return "User Not Found";
                 }
 
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 return ex.ToString();
             }
-
-            return "Address Added Successfully";
         }
-
 
         public List<UserDetailsModel> GetAllUsers()
         {
-
-            EcommerceContext db = new EcommerceContext();
-            List<UserDetailsModel> list = new List<UserDetailsModel>();
             try
             {
+                EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("-------Db Connection Established----------");
+                List<UserDetailsModel> list = new List<UserDetailsModel>();
+
                 foreach (User user in db.Users)
                 {
                     var printuser = new UserDetailsModel()
@@ -327,14 +355,14 @@ namespace Ecommerce.Repository
                     };
                     list.Add(printuser);
                 }
-
+                _logger.LogInformation("-----------All User Retrieved-----------");
+                return list;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
-
-            return list;
         }
 
 
@@ -343,6 +371,7 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("-----------DB Connection Established----------");
                 var user = db.Users.Where(x => x.Id == id).FirstOrDefault();
                 var temp = new UserDetailsModel()
                 {
@@ -405,14 +434,16 @@ namespace Ecommerce.Repository
 
 
         public bool DeactivateUser(int id, string password)
-        {
-            EcommerceContext db = new EcommerceContext();
+        {  
             try
             {
+                EcommerceContext db = new EcommerceContext();
+                _logger.LogInformation("-----DB Connection Established-----");
                 var user = db.Users.First(x => x.Id == id);
 
                 if (user == null)
                 {
+                    _logger.LogError("-----User Doesn't Exist-----");
                     throw new Exception("User doesn't exist");
                 }
 
@@ -421,13 +452,20 @@ namespace Ecommerce.Repository
                     user.Isactive = false;
                     db.Users.Update(user);
                     db.SaveChanges();
+                    _logger.LogInformation("-----User Deactivated-----");
+                    return true;
+                }
+                else
+                {
+                    _logger.LogInformation("-----Invalid Password-----");
+                    return false;
                 }
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
-            }
-            return true;
+            }   
         }
     }
 }
