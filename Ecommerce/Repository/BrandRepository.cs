@@ -11,10 +11,11 @@ namespace Ecommerce.Repository
     public class BrandRepository : IBrandRepository
     {
         private readonly ILogger<BrandRepository> _logger;
-        public BrandRepository(IBrandRepository brandRepository, ILogger<BrandRepository> logger)
+        public BrandRepository(ILogger<BrandRepository> logger)
         {
             _logger = logger;
         }
+
         public bool AddBrands(BrandModel model)
         {
             try

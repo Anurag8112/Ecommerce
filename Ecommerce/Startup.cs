@@ -22,6 +22,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Twilio.Clients;
+using Stripe;
+
 
 namespace Ecommerce
 {
@@ -57,7 +59,6 @@ namespace Ecommerce
             services.AddHttpClient<ITwilioRestClient, TwilioClient>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            
 
             services.AddSession(option =>
             {
@@ -112,9 +113,6 @@ namespace Ecommerce
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:key"])),
                 };
             });
-
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

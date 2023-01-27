@@ -22,7 +22,7 @@ namespace Ecommerce.Repository
             try
             {
                 EcommerceContext db = new EcommerceContext();
-                _logger.LogInformation("-----DB COnnection Established-----");
+                _logger.LogInformation("-----DB Connection Established-----");
                 var IsWishlistExist = db.Wishlists.FirstOrDefault(x => x.UserId == model.UserId);
                 var isValidUser = db.Users.FirstOrDefault(x => x.Id == model.UserId);
                 var isValidProduct = db.ProductDetails.FirstOrDefault(x => x.Id == model.ProductDetailsId);

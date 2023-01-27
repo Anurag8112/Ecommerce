@@ -12,8 +12,7 @@ namespace Ecommerce
         {
             var logPath = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
             NLog.GlobalDiagnosticsContext.Set("LogDirectory", logPath);
-
-
+  
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -25,7 +24,6 @@ namespace Ecommerce
                 }).ConfigureLogging(opt=> {
                     opt.ClearProviders();
                     opt.SetMinimumLevel(LogLevel.Trace);
-
                 }).UseNLog();
     }
 }

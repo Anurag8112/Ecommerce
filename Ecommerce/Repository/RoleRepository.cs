@@ -74,7 +74,7 @@ namespace Ecommerce.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.InnerException.ToString();
+                _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
         }
