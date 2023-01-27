@@ -22,7 +22,7 @@ namespace Ecommerce.Controllers
 
         [HttpPost]
         [Route("AddGender")]
-        //[Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult AddGender(AddGenderModel model)
         {
             try
@@ -35,7 +35,6 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
         [HttpDelete]
         [Route("RemoveGender")]
         [Authorize(Roles = "SuperAdmin")]
