@@ -455,6 +455,7 @@ namespace Ecommerce.Repository
                     _logger.LogInformation("-----User Deactivated-----");
                     return true;
                 }
+
                 else
                 {
                     _logger.LogInformation("-----Invalid Password-----");

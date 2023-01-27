@@ -28,17 +28,17 @@ using Stripe;
 namespace Ecommerce
 {
     public class Startup
-    {
+    {   
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
-
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {   
             services.AddMvc();
             services.AddControllers();
             services.AddDbContext<DbContext>(options =>
@@ -51,6 +51,7 @@ namespace Ecommerce
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IOrderRepository, OrderNowRepository>();
             services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+            services.AddScoped<IGenderRepository, GenderRepository>();
             services.AddScoped<IDeliveryPartnerRepository, DeliveryPartnerRepository>();
             services.AddScoped<IHubRepository, HubRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
@@ -58,7 +59,6 @@ namespace Ecommerce
             services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
             services.AddHttpClient<ITwilioRestClient, TwilioClient>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
 
             services.AddSession(option =>
             {
@@ -81,7 +81,6 @@ namespace Ecommerce
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
-
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -124,7 +123,6 @@ namespace Ecommerce
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecommerce v1"));
             }
-
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseSession();

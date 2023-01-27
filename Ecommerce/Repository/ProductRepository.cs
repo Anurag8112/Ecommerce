@@ -303,14 +303,14 @@ namespace Ecommerce.Repository
 
                 foreach (var product in UserProdMapping.Include(x=>x.Prod))
                 {
+                    var x = product;
                     var showProducts = new ShowProduct()
                     {
-                        UserId=userId,
-                        UserName=user.UserName,
-                        productData=new ProductData()
+                        UserName = user.UserName,
+                        productData = new ProductData()
                         {
-                            productName=product.Prod.ProdName,
-                            productDesc=product.Prod.ProdDescription,
+                            productName = product.Prod.ProdName,
+                            productDesc = product.Prod.ProdDescription,
                         }
                     };
                     ProductList.Add(showProducts);

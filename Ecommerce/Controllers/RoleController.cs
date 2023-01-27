@@ -21,7 +21,7 @@ namespace Ecommerce.Controllers
 
         [HttpPost]
         [Route("AddRole")]
-        [Authorize(Roles = "SuperAdmin")]
+        //[Authorize(Roles = "SuperAdmin")]
         public IActionResult AddRole(RoleModel model)
         {
             try
