@@ -30,7 +30,7 @@ namespace Ecommerce.Controllers
                 var Result = _cartRepository.AddToCart(model);
                 if (Result == false)
                 {
-                    _logger.LogInformation("------------------Product Already Exist in Cart-----------------");
+                    _logger.LogInformation("--------------Product Already Exist in Cart------------");
                     return Ok("Product Already Exist in Cart");
                 }
                 _logger.LogInformation("------------------API Respond Successfully-----------------");
