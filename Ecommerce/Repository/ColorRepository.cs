@@ -80,7 +80,7 @@ namespace Ecommerce.Repository
 
                 Color.Color1 = model.Color;
 
-                db.Colors.Add(Color);
+                db.Colors.Update(Color);
                 db.SaveChanges();
                 logger.LogInformation("-----Color Edited Successfully-----");
                 return true;

@@ -52,14 +52,18 @@ namespace Ecommerce
             services.AddScoped<IOrderRepository, OrderNowRepository>();
             services.AddScoped<IWarehouseRepository, WarehouseRepository>();
             services.AddScoped<ISizeRepository, SizeRepository>();
+            services.AddScoped<IColorRepository, ColorRepository>();
             services.AddScoped<IGenderRepository, GenderRepository>();
             services.AddScoped<IDeliveryPartnerRepository, DeliveryPartnerRepository>();
             services.AddScoped<IHubRepository, HubRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IStripeAppService, StripeAppService>();
             services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
             services.AddHttpClient<ITwilioRestClient, TwilioClient>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddStripeInfrastructure(Configuration);
+
 
             services.AddSession(option =>
             {
@@ -113,6 +117,8 @@ namespace Ecommerce
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:key"])),
                 };
             });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

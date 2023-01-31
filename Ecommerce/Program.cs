@@ -4,8 +4,10 @@ using Microsoft.Extensions.Logging;
 using NLog.Web;
 using System.IO;
 
+
 namespace Ecommerce
 {
+
     public class Program
     {
         public static void Main(string[] args)
@@ -13,6 +15,7 @@ namespace Ecommerce
             var logPath = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
             NLog.GlobalDiagnosticsContext.Set("LogDirectory", logPath);
   
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -21,7 +24,8 @@ namespace Ecommerce
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                }).ConfigureLogging(opt=> {
+                }).ConfigureLogging(opt =>
+                {
                     opt.ClearProviders();
                     opt.SetMinimumLevel(LogLevel.Trace);
                 }).UseNLog();
