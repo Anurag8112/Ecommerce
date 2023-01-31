@@ -84,8 +84,8 @@ namespace Ecommerce.Controllers
             }
         }
         [HttpPost]
-        [Route("Update-Address")]
-        [Authorize(Roles = "SuperAdmin")]
+        [Route("Update-Address/{userId}")]
+        [Authorize(Roles = "Buyer")]
         public IActionResult UpdateUserAddress(int userId, AddressModel userAddress)
         {
             if (!ModelState.IsValid)
