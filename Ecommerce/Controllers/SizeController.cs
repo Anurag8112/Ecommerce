@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Interface;
 using Ecommerce.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -34,7 +35,7 @@ namespace Ecommerce.Controllers
 
         [HttpDelete]
         [Route("DeleteSize")]
-        //[Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult DeleteSize(DeleteSizeModel model)
         {
             try
@@ -51,7 +52,7 @@ namespace Ecommerce.Controllers
 
         [HttpPatch]
         [Route("EditSize")]
-        //[Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult EditSize(EditSizeModel model)
         {
             try
@@ -68,7 +69,7 @@ namespace Ecommerce.Controllers
 
         [HttpGet]
         [Route("ShowAllSize")]
-        //[Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult ShowAllSize()
         {
             try

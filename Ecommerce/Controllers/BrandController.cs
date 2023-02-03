@@ -23,7 +23,7 @@ namespace Ecommerce.Controllers
 
         [HttpPost]
         [Route("AddBrand")]
-        //[Authorize(Roles = "SuperAdmin,Seller")]
+        [Authorize(Roles = "SuperAdmin,Seller")]
         public IActionResult AddBrand(BrandModel model)
         {
             try
@@ -59,7 +59,6 @@ namespace Ecommerce.Controllers
 
         [HttpGet]
         [Route("ShowAllBrand")]
-        [Authorize]
         public IActionResult ShowAllBrand()
         {
             try

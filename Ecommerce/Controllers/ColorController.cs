@@ -19,7 +19,7 @@ namespace Ecommerce.Controllers
 
         [HttpPost]
         [Route("AddColor")]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin,Buyer")]
         public IActionResult AddColor(AddColorModel model)
         {
             try
@@ -67,7 +67,6 @@ namespace Ecommerce.Controllers
 
         [HttpGet]
         [Route("ShowAllColors")]
-        [Authorize(Roles = "SuperAdmin")]
         public IActionResult ShowAllColors()
         {
             try

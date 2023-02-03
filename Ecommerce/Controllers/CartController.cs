@@ -42,11 +42,10 @@ namespace Ecommerce.Controllers
             }
         }
 
-
         [HttpDelete]
         [Route("RemoveFromCart")]
         [Authorize(Roles = "Buyer")]
-        public IActionResult RemoveFromCart(CartModel model)
+        public IActionResult RemoveFromCart(DeleteCartItem model)
         {
             try
             {

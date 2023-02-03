@@ -21,7 +21,7 @@ namespace Ecommerce.Controllers
 
         [HttpPost]
         [Route("Add-Product")]
-        // [Authorize(Roles = "Seller")]
+        [Authorize(Roles = "Seller")]
         public IActionResult Addproducts(ProductModel product)
         {
             try
@@ -40,7 +40,6 @@ namespace Ecommerce.Controllers
 
         [HttpGet]
         [Route("Show-ALL-Products")]
-        [Authorize(Roles = "SuperAdmin")]
         public IActionResult ShowAllProducts()
         {
             try
@@ -72,6 +71,7 @@ namespace Ecommerce.Controllers
         }
         [HttpGet]
         [Route("{id}/Show-My-Products")]
+        [Authorize]
         public IActionResult ShowMyProduct(int id)
         {
             try

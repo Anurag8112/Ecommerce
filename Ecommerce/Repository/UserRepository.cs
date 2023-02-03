@@ -254,7 +254,7 @@ namespace Ecommerce.Repository
                                 jwt.Issuer,
                                 jwt.Audience,
                                 claims,
-                                expires: DateTime.Now.AddMinutes(5),
+                                expires: DateTime.Now.AddMinutes(60),
                                 signingCredentials: signIn
                                 );
                         _logger.LogInformation("-----------JWT Token Generated-----------");

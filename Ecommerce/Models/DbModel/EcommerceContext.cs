@@ -142,6 +142,8 @@ namespace Ecommerce.Models.DbModel
                     .HasForeignKey(d => d.ProdId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cart_Product_Detail");
+
+                entity.Property(e => e.Quantity).HasColumnName("Quantity");
             });
 
             modelBuilder.Entity<CartTable>(entity =>
@@ -410,9 +412,9 @@ namespace Ecommerce.Models.DbModel
             {
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
-                entity.Property(e => e.Status)
+                entity.Property(e => e.Currency)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(5)
                     .IsUnicode(false);
 
                 entity.Property(e => e.TransectionId)

@@ -13,7 +13,6 @@ namespace Ecommerce.Repository
     {
         private readonly ILogger<ProductRepository> _logger;
 
-
         public readonly IUserRepository _userRepository;
         public ProductRepository(IUserRepository userRepository, ILogger<ProductRepository> logger)
         {
@@ -55,7 +54,6 @@ namespace Ecommerce.Repository
                 _logger.LogError(ex.InnerException.ToString());
                 throw new Exception(ex.Message);
             }
-
         }
 
         public CategoryLevel3 GetCategoryL3(int id)
@@ -91,6 +89,7 @@ namespace Ecommerce.Repository
                 throw new Exception(ex.Message);
             }
         }
+
         public Size GetSizeById(int id)
         {
             try
@@ -290,27 +289,78 @@ namespace Ecommerce.Repository
                 throw new Exception(ex.Message);
             }
         }
-
         public List<ShowProduct> ShowMyProducts(int userId)
         {
             try
             {
                 EcommerceContext db = new EcommerceContext();
 
+                var IsValiduser = db.Users.FirstOrDefault(x => x.Id == userId);
+                if (IsValiduser == null)
+                {
+                    _logger.LogError("-----Invalid User Id-----");
+                    throw new Exception("Invalid User Id");
+                }
+
                 var UserProdMapping = db.UserProductMappings.Where(x => x.UserId == userId);
-                var user = db.Users.FirstOrDefault(x => x.Id == userId);
+
                 List<ShowProduct> ProductList = new List<ShowProduct>();
 
-                foreach (var product in UserProdMapping.Include(x=>x.Prod))
+                foreach (var product in UserProdMapping
+                                     .Include(x=>x.Prod)
+                                     .Include(x=>x.Prod.ProductDetails)
+                                     .Include(x=>x.Prod.ProductImages))
                 {
+
+                    var oneImage = product.Prod.ProductImages.Where(x => x.ProdId == product.ProdId);
+                    List<String> ListOfImage = new List<string>();
+
+                    foreach (var image in oneImage)
+                    {
+                        ListOfImage.Add(image.Image);
+                    }
+
                     var x = product;
                     var showProducts = new ShowProduct()
                     {
-                        UserName = user.UserName,
+                        UserId=userId,
+                        UserName = IsValiduser.UserName,
                         productData = new ProductData()
                         {
                             productName = product.Prod.ProdName,
                             productDesc = product.Prod.ProdDescription,
+                            productDetail = new ProdDetail()
+                            {
+                                price = product.Prod.ProductDetails.FirstOrDefault(x => x.ProdId == product.Prod.ProdId).ProdId,
+                                productColor= new ProductColors()
+                                {
+                                    colorName=GetColorById(product.Prod.ProductDetails.FirstOrDefault(x => x.ProdId == product.Prod.ProdId).ColorId).Color1,
+                                },
+                                productSize=new ProductSizes()
+                                {
+                                    sizeName=GetSizeById(product.Prod.ProductDetails.FirstOrDefault(x=>x.ProdId==product.Prod.ProdId).SizeId).Size1,
+                                }
+                            },
+                            brand=new Brands()
+                            {
+                                brandName=GetBrandName(product.Prod.BrandId).BrandName,
+                            },
+                            categoryL1=new CategoryL1()
+                            {
+                                categoryL1=GetCategoryL1(product.Prod.CategoryL1id).CategoryL1,
+                            },
+                            categoryL2=new CategoryL2()
+                            {
+                                categoryL2=GetCategoryL2(product.Prod.CategoryL2id).CategoryL2,
+                            },
+                            categoryL3=new CategoryL3()
+                            {
+                                categoryL3=GetCategoryL3(product.Prod.CategoryL3id).CategoryL3,
+                            },
+                            productImage=new ProductImages()
+                            {
+                                image= ListOfImage,
+                            }
                         }
                     };
                     ProductList.Add(showProducts);

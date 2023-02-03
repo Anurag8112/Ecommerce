@@ -59,7 +59,8 @@ namespace Ecommerce.Repository
                     var CartItem = new Cart()
                     {
                         ProdId = model.ProductDetailId,
-                        CartId = tempCart.Id
+                        CartId = tempCart.Id,
+                        Quantity=model.Quantity
                     };
 
                     tempCart.Carts.Add(CartItem);
@@ -77,7 +78,8 @@ namespace Ecommerce.Repository
                         {
 
                             ProdId = model.ProductDetailId,
-                            CartId = IsCartExist.Id
+                            CartId = IsCartExist.Id,
+                            Quantity=model.Quantity
                         };
 
                         db.Carts.Add(CartItems);
@@ -97,13 +99,13 @@ namespace Ecommerce.Repository
             }
         }
 
-        public bool RemoveFromCart(CartModel model)
+        public bool RemoveFromCart(DeleteCartItem model)
         {
             try
             {
                 EcommerceContext db = new EcommerceContext();
                 var IsCartExist = db.CartTables.FirstOrDefault(x => x.UserId == model.UserId);
-                var isValidUser = db.Wishlists.FirstOrDefault(x => x.UserId == model.UserId);
+                var isValidUser = db.CartTables.FirstOrDefault(x => x.UserId == model.UserId);
                 var isValidProduct = db.Carts.FirstOrDefault(x => x.ProdId == model.ProductDetailId && IsCartExist.Id == x.CartId);
 
 

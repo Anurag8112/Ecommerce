@@ -38,9 +38,9 @@ namespace Ecommerce.Controllers
 
 
 
-        [HttpPost]
+        [HttpDelete]
         [Route("DeleteComment")]
-        [Authorize(Roles = "Buyer")]
+        [Authorize(Roles = "SuperAdmin,Buyer")]
         public IActionResult DeleteComment(DeleteCommentModel model)
         {
             try

@@ -8,6 +8,8 @@ namespace Ecommerce.Models.ViewModel
         public int UserId { get; set; }
         [Required]
         public int ProductDetailId { get; set; }
+        [Required]
+        public int Quantity { get; set; }
     }
     public class ShowCart
     {

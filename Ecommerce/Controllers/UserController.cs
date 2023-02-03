@@ -21,6 +21,7 @@ namespace Ecommerce.Controllers
 
         [HttpPost]
         [Route("Sign-up")]
+        [Authorize]
         public IActionResult SignUp(SignUpModel user)
         {
             try
@@ -38,16 +39,20 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
         [HttpPost]
         [Route("Verify-User")]
-        public IActionResult VerifyUser(string otp)
+        [Authorize]
+        public IActionResult VerifyUser(OtpModel model)
         {
-            var res = _userRepository.VerifyUser(otp);
+            var res = _userRepository.VerifyUser(model.Otp);
             _logger.LogInformation("-------------API Respond Successfully-------------");
             return Ok(res);
         }
+
         [HttpPost]
         [Route("ResendOTP")]
+        [Authorize]
         public IActionResult ResendOTP(string MobileNo)
         {
             try
@@ -83,6 +88,7 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
         [HttpPost]
         [Route("Update-Address/{userId}")]
         [Authorize(Roles = "Buyer")]
@@ -96,6 +102,7 @@ namespace Ecommerce.Controllers
             _logger.LogInformation("-------------API Respond Successfully-------------");
             return Ok(result);
         }
+
         [HttpGet]
         [Route("GetAllUsers")]
         [Authorize(Roles = "SuperAdmin")]
@@ -112,6 +119,7 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
         [HttpGet]
         [Route("User/{id}")]
         [Authorize(Roles = "SuperAdmin")]

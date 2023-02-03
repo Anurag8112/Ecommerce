@@ -67,7 +67,7 @@ namespace Ecommerce
 
             services.AddSession(option =>
             {
-                option.IdleTimeout = TimeSpan.FromMinutes(5);
+                option.IdleTimeout = TimeSpan.FromMinutes(60);
             });
 
             services.AddControllers().AddJsonOptions(option =>

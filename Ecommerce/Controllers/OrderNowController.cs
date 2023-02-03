@@ -21,7 +21,7 @@ namespace Ecommerce.Controllers
 
         [HttpPost]
         [Route("Order")]
-      //  [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Buyer")]
         public IActionResult OrderNow(OrderModel model)
         {
             try
@@ -31,6 +31,23 @@ namespace Ecommerce.Controllers
                 return Ok(Result);
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("OrderFromCart")]
+        [Authorize(Roles ="Buyer")]
+        public IActionResult OrderFromCart(CartOrderModel model)
+        {
+            try
+            {
+                var Result = _OrderRepository.OrderNowByCart(model);
+                _logger.LogInformation("-------------API Respond Successfully-------------");
+                return Ok(Result);
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }

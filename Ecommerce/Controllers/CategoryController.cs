@@ -129,12 +129,29 @@ namespace Ecommerce.Controllers
 
         [HttpGet]
         [Route("ShowCategoryL1")]
-        [Authorize]
         public IActionResult ShowCategoryL1()
         {
             try
             {
                 var Result = _categoryRepository.ShowCategoryL1();
+                _logger.LogInformation("-----API Respond Successfully-----");
+                return Ok(Result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return BadRequest("Error occurred: " + ex.Message);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("ShowCategoryL2/{id}")]
+        public IActionResult ShowCategoryL2(int id)
+        {
+            try
+            {
+                var Result = _categoryRepository.ShowCategoryL2(id);
                 _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }
@@ -147,32 +164,12 @@ namespace Ecommerce.Controllers
 
 
         [HttpGet]
-        [Route("ShowCategoryL2")]
-        [Authorize]
-        public IActionResult ShowCategoryL2()
+        [Route("ShowCategoryL3/{id}")]
+        public IActionResult ShowCategoryL3(int id)
         {
             try
             {
-                var Result = _categoryRepository.ShowCategoryL2();
-                _logger.LogInformation("-------------API Respond Successfully-------------");
-                return Ok(Result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.ToString());
-                return BadRequest("Error occurred: " + ex.Message);
-            }
-        }
-
-
-        [HttpGet]
-        [Route("ShowCategoryL3")]
-        [Authorize]
-        public IActionResult ShowCategoryL3()
-        {
-            try
-            {
-                var Result = _categoryRepository.ShowCategoryL3();
+                var Result = _categoryRepository.ShowCategoryL3(id);
                 _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }

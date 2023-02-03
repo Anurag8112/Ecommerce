@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Models.ViewModel
 {
-    public class OrderModel
+    public class CartOrderModel
     {
         [Required]
         public int UserId { get; set; }
@@ -16,15 +16,6 @@ namespace Ecommerce.Models.ViewModel
         [Required]
         public int AddressId { get; set; }
         [Required]
-        public int Quantity { get; set; }
-        [Required]
-        public int ProdId { get; set; }
-        [Required]
-        public int SizeId { get; set; }
-        [Required]
-        public int ColorId { get; set; }
-        [Required]
         public string Currency { get; set; }
-
     }
 }

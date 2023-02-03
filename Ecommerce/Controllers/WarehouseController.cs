@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Interface;
 using Ecommerce.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,7 +20,7 @@ namespace Ecommerce.Controllers
         }
         [HttpPost]
         [Route("AddWarehouse")]
-        // [Authorize(Roles = "WarehouseManager,SuperAdmin")]
+        [Authorize(Roles = "WarehouseManager,SuperAdmin")]
         public IActionResult AddWarehouse(WarehouseModel model)
         {
             try
@@ -35,7 +36,7 @@ namespace Ecommerce.Controllers
         }
         [HttpPatch]
         [Route("EditWareHouseName")]
-        // [Authorize(Roles = "WarehouseManager,SuperAdmin")]
+        [Authorize(Roles = "WarehouseManager,SuperAdmin")]
         public IActionResult EditWarehouseName(EditWarehouseModel model)
         {
             try
@@ -51,7 +52,7 @@ namespace Ecommerce.Controllers
         }
         [HttpDelete]
         [Route("DeleteWarehouse")]
-        //[Authorize(Roles = "WarehouseManager,SuperAdmin")]
+        [Authorize(Roles = "WarehouseManager,SuperAdmin")]
         public IActionResult DeleteWarehouse(DeleteWarehouseModel model)
         {
             try
@@ -67,7 +68,7 @@ namespace Ecommerce.Controllers
         }
         [HttpGet]
         [Route("GetAllWarehouse")]
-        //[Authorize(Roles = "WarehouseManager,SuperAdmin")]
+        [Authorize(Roles = "WarehouseManager,SuperAdmin")]
         public IActionResult GetAllWarehouse()
         {
             try

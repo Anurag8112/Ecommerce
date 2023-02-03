@@ -223,7 +223,7 @@ namespace Ecommerce.Repository
             }
         }
 
-        public List<ShowCategoryL2Model> ShowCategoryL2()
+        public List<ShowCategoryL2Model> ShowCategoryL2(int id)
         {
             try
             {
@@ -231,11 +231,17 @@ namespace Ecommerce.Repository
 
                 List<ShowCategoryL2Model> CategoryList = new List<ShowCategoryL2Model>();
 
-                var AllCategory = db.CategoryLevel2s.Select(x => new ShowCategoryL2Model { CategoryL2Id = x.Id, CategoryL2Name = x.CategoryL2 });
+                var AllCategory = db.CategoryLevel2s.Where(x =>x.CategoryL1Id==id);
 
                 foreach (var category in AllCategory)
                 {
-                    CategoryList.Add(category);
+                    var Category = new ShowCategoryL2Model()
+                    {
+                        CategoryL2Id =category.Id,
+                        CategoryL2Name=category.CategoryL2
+                    };
+
+                    CategoryList.Add(Category);
                 }
 
                 foreach (var category in CategoryList)
@@ -252,7 +258,7 @@ namespace Ecommerce.Repository
             }
         }
 
-        public List<ShowCategoryL3Model> ShowCategoryL3()
+        public List<ShowCategoryL3Model> ShowCategoryL3(int id)
         {
             try
             {
@@ -260,11 +266,17 @@ namespace Ecommerce.Repository
 
                 List<ShowCategoryL3Model> CategoryList = new List<ShowCategoryL3Model>();
 
-                var AllCategory = db.CategoryLevel3s.Select(x => new ShowCategoryL3Model { CategoryL3Id = x.Id, CategoryL3Name = x.CategoryL3 });
+                var AllCategory = db.CategoryLevel3s.Where(x =>x.CategoryL2Id==id);
 
                 foreach (var category in AllCategory)
                 {
-                    CategoryList.Add(category);
+                    var Category = new ShowCategoryL3Model()
+                    {
+                        CategoryL3Id = category.Id,
+                        CategoryL3Name = category.CategoryL3
+                    };
+
+                    CategoryList.Add(Category);
                 }
 
                 foreach (var category in CategoryList)
