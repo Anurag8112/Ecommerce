@@ -36,8 +36,6 @@ namespace Ecommerce.Controllers
             }
         }
 
-
-
         [HttpGet]
         [Route("Show-ALL-Products")]
         public IActionResult ShowAllProducts()
@@ -53,6 +51,7 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
         [HttpDelete]
         [Route("DeleteMyProduct")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -69,6 +68,7 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error Occured: " + ex.Message);
             }
         }
+
         [HttpGet]
         [Route("{id}/Show-My-Products")]
         [Authorize]
@@ -85,6 +85,7 @@ namespace Ecommerce.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpGet]
         [Route("GetProductComment")]
         public IActionResult GetProductComment(CommentModel model)

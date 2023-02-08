@@ -35,6 +35,7 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
         [HttpDelete]
         [Route("RemoveGender")]
         [Authorize(Roles = "SuperAdmin")]
@@ -50,6 +51,7 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
         [HttpPatch]
         [Route("EditGender")]
         [Authorize(Roles = "SuperAdmin")]
@@ -65,6 +67,7 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
         [HttpGet]
         [Route("ShowGenders")]
         [Authorize(Roles = "SuperAdmin")]

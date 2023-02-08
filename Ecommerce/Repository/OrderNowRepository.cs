@@ -23,6 +23,7 @@ namespace Ecommerce.Repository
         {
             try
             {
+
                 EcommerceContext db = new EcommerceContext();
                 _logger.LogInformation("----------DB Connection Established----------");
                 var Product = db.ProductDetails.FirstOrDefault(x => x.ProdId == model.ProdId && x.SizeId==model.SizeId && x.ColorId==model.ColorId);

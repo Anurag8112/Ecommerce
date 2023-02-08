@@ -7,6 +7,6 @@ namespace Ecommerce.Interface
     {
         public bool AddToWishlist(WishlistModel model);
         public bool RemoveFromWishlist(WishlistModel model);
-        public List<ShowProduct> ShowMyWishlist(ShowWishlist model);
+        public List<ShowProduct> ShowMyWishlist(int userId);
     }
 }

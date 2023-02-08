@@ -36,7 +36,6 @@ namespace Ecommerce.Controllers
             }
         }
 
-
         [HttpPost]
         [Route("AddCategoryL2")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -53,7 +52,6 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
 
         [HttpPost]
         [Route("AddCategoryL3")]
@@ -72,7 +70,6 @@ namespace Ecommerce.Controllers
             }
         }
 
-
         [HttpDelete]
         [Route("DeleteCategoryL1")]
         [Authorize(Roles = "SuperAdmin")]
@@ -89,7 +86,6 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
 
         [HttpDelete]
         [Route("DeleteCategoryL2")]

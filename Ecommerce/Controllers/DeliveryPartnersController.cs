@@ -37,7 +37,6 @@ namespace Ecommerce.Controllers
             }
         }
 
-
         [HttpDelete]
         [Route("DeleteDeliveryPartners")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -54,6 +53,7 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
         [HttpPatch]
         [Route("EditDeliveryPartners")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -70,6 +70,7 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
+
         [HttpGet]
         [Route("ShowDeliveryPartners")]
         [Authorize(Roles = "SuperAdmin,Seller")]

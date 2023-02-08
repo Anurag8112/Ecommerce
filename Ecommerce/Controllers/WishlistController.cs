@@ -58,13 +58,13 @@ namespace Ecommerce.Controllers
             }
         }
         [HttpGet]
-        [Route("ShowMyWishlist")]
-        [Authorize(Roles = "Buyer")]
-        public IActionResult ShowMyWishlist(ShowWishlist model)
+        [Route("ShowMyWishlist/{userId}")]
+        //[Authorize(Roles = "Buyer")]
+        public IActionResult ShowMyWishlist(int userId)
         {
             try
             {
-                var Result = _wishlistRepository.ShowMyWishlist(model);
+                var Result = _wishlistRepository.ShowMyWishlist(userId);
                 _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
             }

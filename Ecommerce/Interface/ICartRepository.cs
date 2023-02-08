@@ -7,6 +7,6 @@ namespace Ecommerce.Interface
     {
         public bool AddToCart(CartModel model);
         public bool RemoveFromCart(DeleteCartItem model);
-        public List<ShowProduct> ShowCartItems();
+        public List<ShowProduct> ShowCartItems(int userId);
     }
 }

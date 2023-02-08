@@ -12,7 +12,6 @@ namespace Ecommerce.Repository
     public class ProductRepository : IProductRepository
     {
         private readonly ILogger<ProductRepository> _logger;
-
         public readonly IUserRepository _userRepository;
         public ProductRepository(IUserRepository userRepository, ILogger<ProductRepository> logger)
         {

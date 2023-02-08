@@ -14,7 +14,7 @@ namespace Ecommerce.Controllers
         private readonly ICartRepository _cartRepository;
         private readonly ILogger<CartController> _logger;
 
-        public CartController(ICartRepository cartRepository,ILogger<CartController> logger)
+        public CartController(ICartRepository cartRepository, ILogger<CartController> logger)
         {
             _logger = logger;
             _cartRepository = cartRepository;
@@ -51,6 +51,23 @@ namespace Ecommerce.Controllers
             {
                 var Result = _cartRepository.RemoveFromCart(model);
                 _logger.LogInformation("------------------API Respond Successfully-----------------");
+                return Ok(Result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occurred: " + ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("ShowCartItems/{id}")]
+        [Authorize(Roles = "Buyer")]
+        public IActionResult ShowCaetItem(int userId)
+        {
+            try
+            {
+                var Result = _cartRepository.ShowCartItems(userId);
+                _logger.LogInformation("-----API Responded Successfully------");
                 return Ok(Result);
             }
             catch (Exception ex)

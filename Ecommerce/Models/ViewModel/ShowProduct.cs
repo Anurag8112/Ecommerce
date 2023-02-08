@@ -62,5 +62,4 @@ namespace Ecommerce.Models.ViewModel
     {
         public string colorName { get; set; }
     }
-
 }
