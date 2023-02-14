@@ -5,7 +5,7 @@ namespace Ecommerce.Interface
     public interface IDeliveryBoyRepository
     {
         public bool AddDeliveryBoy(AddDeliveryBoyModel model);
-        public bool RemoveDeliveryBoy();
-        public bool ChangeDeliveryHub();
+        public bool RemoveDeliveryBoy(int UserId);
+        public bool ChangeDeliveryHub(ChangeDeliveryHubModel model);
     }
 }

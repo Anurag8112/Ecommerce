@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Controllers
 {
@@ -32,7 +29,40 @@ namespace Ecommerce.Controllers
                 var Result = _deliveryBoyRepository.AddDeliveryBoy(model);
                 _logger.LogInformation("-------------API Respond Successfully-------------");
                 return Ok(Result);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occurred: " + ex.Message);
+            }
+        }
+
+        [HttpPatch]
+        [Route("ChangeDeliveryHub")]
+        [Authorize(Roles ="SuperAdmin,Seller")]
+        public IActionResult ChangeDeliveryHub(ChangeDeliveryHubModel model)
+        {
+            try
+            {
+                var Result = _deliveryBoyRepository.ChangeDeliveryHub(model);
+                return Ok(Result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occurred: " + ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("RemoveDeliveryBoy/{UserId}")]
+        [Authorize(Roles ="SuperAdmin,Seller")]
+        public IActionResult RemoveDeliveryBoy(int UserId)
+        {
+            try
+            {
+                var Result = _deliveryBoyRepository.RemoveDeliveryBoy(UserId);
+                return Ok(Result);
+            }
+            catch (Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);
             }

@@ -55,6 +55,7 @@ namespace Ecommerce
             services.AddScoped<IColorRepository, ColorRepository>();
             services.AddScoped<IGenderRepository, GenderRepository>();
             services.AddScoped<IDeliveryPartnerRepository, DeliveryPartnerRepository>();
+            services.AddScoped<IDeliveryBoyRepository, DeliveryBoyRepository>();
             services.AddScoped<IHubRepository, HubRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
