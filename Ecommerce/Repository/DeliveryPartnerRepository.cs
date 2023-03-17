@@ -66,7 +66,6 @@ namespace Ecommerce.Repository
             }
         }
 
-
         public bool EditDeliveryPartnerName(EditDeliveryPartnerModel model)
         {
             try
@@ -94,7 +93,6 @@ namespace Ecommerce.Repository
                 throw new Exception(ex.Message);
             }
         }
-
 
         public List<ShowDeliveryPartner> ShowDeliveryPartners()
         {

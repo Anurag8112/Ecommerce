@@ -4,6 +4,7 @@ using Ecommerce.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Ecommerce.Repository
@@ -17,7 +18,7 @@ namespace Ecommerce.Repository
         {
             _logger = logger;
             _cartRepository = cartRepository;
-    }
+        }
 
         public bool OrderNow(OrderModel model)
         {
@@ -171,6 +172,11 @@ namespace Ecommerce.Repository
             {
                 throw new Exception(ex.InnerException.ToString());
             }
+        }
+
+        public List<ShowMyOrdersModel> ShowUserOrder(ShowMyOrdersModel model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

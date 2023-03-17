@@ -27,7 +27,7 @@ namespace Ecommerce.Controllers
             try
             {
                 var Result = _commentRepository.AddComment(model);
-                _logger.LogInformation("-------------API Respond Successfully-------------");
+                _logger.LogInformation("------API Respond Successfully------");
                 return Ok(Result);
             }
             catch (Exception ex)
@@ -35,8 +35,6 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
-
 
         [HttpDelete]
         [Route("DeleteComment")]

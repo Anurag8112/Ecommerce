@@ -20,7 +20,6 @@ namespace Ecommerce.Controllers
             _brandRepository = brandRepository;
         }
 
-
         [HttpPost]
         [Route("AddBrand")]
         [Authorize(Roles = "SuperAdmin,Seller")]
@@ -38,7 +37,6 @@ namespace Ecommerce.Controllers
             }
         }
 
-
         [HttpDelete]
         [Route("RemoveBrand")]
         [Authorize(Roles = "SuperAdmin")]
@@ -55,7 +53,6 @@ namespace Ecommerce.Controllers
                 return BadRequest("Error occurred: " + ex.Message);
             }
         }
-
 
         [HttpGet]
         [Route("ShowAllBrand")]

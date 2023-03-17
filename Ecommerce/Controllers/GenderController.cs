@@ -45,7 +45,6 @@ namespace Ecommerce.Controllers
             {
                 var Result = _genderRepository.DeleteGender(model);
                 return Ok(Result);
-
             }catch(Exception ex)
             {
                 return BadRequest("Error occurred: " + ex.Message);

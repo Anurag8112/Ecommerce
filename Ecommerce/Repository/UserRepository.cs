@@ -237,7 +237,6 @@ namespace Ecommerce.Repository
                             new Claim("Id",user.Id.ToString()),
                             new Claim("UserName",user.UserName),
                             new Claim("Password",user.Password),
-
                         };
 
                         foreach (var role in userRole)
@@ -364,7 +363,6 @@ namespace Ecommerce.Repository
             }
         }
 
-
         public UserDetailsModel GetUserById(int id)
         {
             try
@@ -391,7 +389,6 @@ namespace Ecommerce.Repository
                 throw new Exception(ex.Message);
             }
         }
-
 
         public List<AddressModel> GetUserAddresses(int id)
         {
@@ -430,7 +427,6 @@ namespace Ecommerce.Repository
                 throw new Exception(ex.Message);
             }
         }
-
 
         public bool DeactivateUser(int id, string password)
         {  

@@ -4,18 +4,14 @@ using Microsoft.Extensions.Logging;
 using NLog.Web;
 using System.IO;
 
-
 namespace Ecommerce
 {
-
     public class Program
     {
         public static void Main(string[] args)
         {
             var logPath = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
             NLog.GlobalDiagnosticsContext.Set("LogDirectory", logPath);
-  
-
             CreateHostBuilder(args).Build().Run();
         }
 

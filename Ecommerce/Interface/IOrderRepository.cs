@@ -10,5 +10,6 @@ namespace Ecommerce.Interface
     {
         public bool OrderNow(OrderModel model);
         public bool OrderNowByCart(CartOrderModel models);
+        public List<ShowMyOrdersModel> ShowUserOrder(ShowMyOrdersModel model);
     }
 }
